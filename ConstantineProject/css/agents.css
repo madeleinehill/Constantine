@@ -1,0 +1,106 @@
+@font-face {
+  font-family: roman;
+  src: url("../fonts/Roman SD.ttf");
+}
+
+@font-face {
+  font-family: gentium;
+  src: url("https://fonts.googleapis.com/css?family=Gentium+Basic");
+}
+
+h1 {
+  font-family: roman;
+  font-size: 16px;
+  margin: 5%;
+  margin-bottom: 5px;
+}
+
+p.type {
+  font-style: italic;
+  font-family: gentium;
+  font-size: 12px;
+  margin: 5%;
+  margin-top: 0px;
+  margin-bottom: 5px;
+  color: #444;
+}
+
+p {
+  font-family: gentium;
+  font-size: 12px;
+  margin: 5%;
+  color: #000;
+}
+
+.attribution {
+  font-family: gentium;
+  font-size: 12px;
+  margin: 5%;
+  margin-top: 0;
+  color: #000;
+  float: right;
+
+}
+a {
+  font: 11px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #0078A8;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+img {
+  width: 90%;
+  margin:5%;
+}
+
+
+body {
+  overflow-x: hidden;
+	background-image: url("../tiles/paper.tile.jpg");
+}
+
+.tab {
+    overflow: hidden;
+    text-align: center;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+    background-color: rgba(0,0,0,0);
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 10px;
+    transition: 0.3s;
+    font-family: roman;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    color: rgba(150,150,150,1);
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    color: rgba(150,150,150,1);
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border-top: none;
+    color: rgba(0,0,0,1);
+    border: 1px solid #ccc;
+}
+
+
+hr {
+  margin: 1px;
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(160, 100, 70, 0), rgba(160, 100, 70, 0.75), rgba(160, 100, 70, 0));
+}

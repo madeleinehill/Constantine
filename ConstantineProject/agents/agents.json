@@ -1,0 +1,64 @@
+[
+	{
+		"name" : "Constantinople",
+	  "type": "city",
+		"yearRange": [330,1453],
+	  "content": [{"title":"Description",
+							"source":"./data/descriptions/constantinople.description.txt",
+							"att":null},
+						 {"title":"Picture",
+							"source":"./data/pictures/constantinople.picture.txt",
+							"att":"<a href = 'https://en.wikipedia.org/wiki/Constantinople#/media/File:Byzantine_Constantinople-en.png' target='_blank'>Content from Wikipedia</a>"}],
+	  "coordinates" : [41, 28.98],
+		"iconUrl": "./agents/icons/constantinople.png"
+	},
+
+	{
+		"name" : "Rome",
+	  "type": "city",
+		"yearRange": [-800,3000],
+	  "content": [{"title":"Description",
+									"source":"./data/descriptions/rome.description.txt",
+									"att":null},
+								 {"title":"Picture",
+									"source":"./data/pictures/rome.picture.txt",
+									"att":"<a href = 'https://en.wikipedia.org/wiki/Rome#/media/File:Trajansm%C3%A4rkte_Forum.jpg' target='_blank'>Content from Wikipedia</a>"}],
+	  "coordinates" : [42, 12.5],
+		"iconUrl": "./agents/icons/rome.png"
+	},
+
+	{
+		"name" : "Edict of Milan",
+	  "type": "event",
+	  "yearRange": [313,313],
+	  "content": [{"title":"Description",
+									"source":"./data/descriptions/edictofmilan.description.txt",
+									"att":"<a href = 'https://en.wikipedia.org/wiki/Edict_of_Milan' target='_blank'>Content from Wikipedia  (modified)</a>"}],
+	  "coordinates" : [45.5, 9.2],
+		"iconUrl": "./agents/icons/scroll.icon.png"
+	},
+
+	{
+		"name" : "Constantine Hailed as Emperor",
+	  "type": "event",
+	  "yearRange": [306,306],
+	  "content": [{"title":"Description",
+									"source":"./data/descriptions/constantinehailed.description.txt",
+									"att":"<a href = 'https://en.wikipedia.org/wiki/Constantine_the_Great' target='_blank'>Content from Wikipedia  (modified)</a>"}],
+	  "coordinates" : [53.96, -1.087],
+		"iconUrl": "./agents/icons/c.icon.png"
+	},
+
+	{
+		"name" : "Constantine",
+	  "type": "person",
+	  "yearRange": [272,337],
+	  "content": [{"title":"Description",
+									"source":"./data/descriptions/constantine.description.txt",
+									"att":"<a href = 'https://en.wikipedia.org/wiki/Constantine_the_Great' target='_blank'>Content from Wikipedia (modified)</a>"},
+								 {"title":"Picture",
+									"source":"./data/pictures/constantine.picture.txt",
+									"att":"<a href = 'https://upload.wikimedia.org/wikipedia/commons/c/cc/Constantine_I_Hagia_Sophia.jpg' target='_blank'>Content from Wikipedia</a>"}],
+	  "iconUrl": "./agents/icons/c.icon.png"
+	}
+]

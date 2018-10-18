@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<title>Scry</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="./js/leaflet-src.js"></script>
+	<script src="./js/leaflet-sidebar.js"></script>
+	<script src="./js/timeline.js"></script>
+
+	<link rel="stylesheet" href="./css/leaflet.css" />
+	<link rel="stylesheet" href="./css/leaflet-sidebar.css" />
+	<link rel="stylesheet" href="./css/timeline.css" />
+
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="shortcut icon" type="image/x-icon" href="./images/coin.s.png" />
+
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+		}
+
+		#map {
+			width: 100%;
+			height: 93%;
+		}
+
+		.leaflet-container {
+			background-color: rgb(176, 220, 242);
+		}
+	</style>
+
+
+</head>
+
+<body>
+	<div id="sidebar" class="sidebar collapsed">
+		<!-- Nav tabs -->
+		<div class="sidebar-tabs">
+			<ul role="tablist">
+				<li><a href="#home" role="tab"><img src="./images/coin.s.png" height = "40px" width = "40px"></img></a></li>
+				<li><a href="#profile" role="tab"><i class="fa fa-user"></i></a></li>
+				<li><a href="#somethingelse" role="tab"><i class="fa fa-envelope"></i></a></li>
+			</ul>
+
+			<ul role="tablist">
+				<li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+			</ul>
+		</div>
+
+		<!-- Tab panes -->
+		<div class="sidebar-content">
+			<div class="sidebar-pane" id="home">
+				<h1 class="sidebar-header">
+							  <div class ="shader"><b>CONSTANTINE</b></div>
+	              <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+	          </h1>
+				<div class="paper">
+					<p class="lorem">
+						Constantine: From Rome to Byzantium is leaflet-based web application which showcases an interactive historical narrative. Constantine is built with Scry, a technology which visualizes the causal linkage between historical events, which can then be explored
+						at the discretion of the user.
+					</p>
+				</div>
+			</div>
+
+			<div class="sidebar-pane" id="profile">
+				<h1 class="sidebar-header">
+							<div class = "shader">Profile</div>
+							<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+						</h1>
+				<div class="paper">
+					<p>Information about your profile goes here</p>
+				</div>
+			</div>
+
+			<div class="sidebar-pane" id="somethingelse">
+				<h1 class="sidebar-header">
+							<div class = "shader">Somethingelse</div>
+							<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+						</h1>
+				<div class="paper">
+					<p>Something else can go here</p>
+				</div>
+			</div>
+
+			<div class="sidebar-pane" id="settings">
+				<h1 class="sidebar-header">
+							<div class = "shader">Settings</div>
+							<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+						</h1>
+				<div class="paper">
+					<p>Select your desired settings here</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id='map' class='sidebar-map'></div>
+	<div id='timeline-background' class='timeline-background'>
+		<div id = 'timeline-wrapper' class = 'timeline-wrapper'>
+			<input type="range" name="time" min="0" max="0" value="0" class="slider" id="slide">
+			<div id="bubble-wrapper" class = 'bubble-wrapper'>
+				<div id="bubble" class = 'bubble'></div>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<script src="./geo/provinces.js" type="text/javascript"></script>
+	<script src="./geo/rivers.js" type="text/javascript"></script>
+	<script src="./geo/lakes.js" type="text/javascript"></script>
+
+	<script src="./geo/land.js" type="text/javascript"></script>
+
+	<script>
+
+		var mapPeriod = [267,330];
+		var mapYear = mapPeriod[0];
+		document.getElementById('slide').min = mapPeriod[0];
+		document.getElementById('slide').max = mapPeriod[1];
+		document.getElementById('slide').value = mapYear;
+
+		bounds = new L.LatLngBounds(new L.LatLng(20, -50), new L.LatLng(70, 60));
+
+		var map = new L.map('map', {
+			maxBounds: bounds,
+			maxBoundsViscosity: 0.7,
+			zoomSnap: 0.5,
+			minZoom: 4.5,
+			maxZoom: 6
+		}).setView([40, 20], 4);
+
+		var lndStyle = {
+			"color": "#ffefdc",
+			"weight": 0,
+			"fillOpacity": 1.0
+		};
+
+		var wtrStyle = {
+			"color": "#3BF",
+			"weight": 2,
+			"fillOpacity": 1.0
+		};
+
+
+		var polStyle = {
+			"color": "#FF0000",
+			"weight": 0,
+			"fillOpacity": 0.3
+		};
+
+		/*
+		var lndLyr = L.geoJSON(lnd, {
+			style: lndStyle
+		}).addTo(map);
+
+		*/
+
+		var Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+			attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+			subdomains: 'abcd',
+			ext: 'png'
+		}).addTo(map);
+
+		var polLyr = L.geoJSON(pol, {
+			style: polStyle
+		}).addTo(map);
+
+
+		var wtrLyr = L.geoJSON(rvr, {
+			style: wtrStyle
+		}).addTo(map);
+
+		var agents = [];
+		getAgentsFromServer();
+
+		var timeline = document.getElementById("slide");
+		initBubble();
+		var yearTracker = document.getElementById("yearTracker");
+
+		var sidebar = L.control.sidebar('sidebar').addTo(map);
+
+		var currentPopupFrame = null;
+		var currentPopupName = null;
+		var currentPopup = null;
+
+		window.addEventListener("message", receiveMessage, false);
+
+		updateYear();
+
+		function receiveMessage(event) {
+			if (event.data == "current") {
+				currentPopupFrame.contentWindow.postMessage(currentPopup.profile, '*');
+			} else {
+				let target = findAgent(event.data).marker;
+				target.openPopup();
+			}
+		}
+
+		function findAgent(name, type = 'city') {
+				let match = agents.find(function(agent) {
+					return agent.profile.name == name;
+				});
+				return match;
+		}
+
+
+		function getAgentsFromServer() {
+			let path = ("./agents/agents.json");
+			let xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					let data = JSON.parse(this.responseText);
+
+					addAgents(data);
+
+					updateAgents();
+				}
+			};
+			xhttp.open("GET", path, true);
+			xhttp.send();
+		}
+
+		function addAgents(data) {
+			data.forEach(function(element) {
+				let a;
+
+				if (element.type=='city' || element.type=='City') {
+					setupCity(element);
+				}else if (element.type=='person' || element.type=='Person') {
+					setupPerson(element);
+				}else if (element.type=='event' || element.type=='Event') {
+					setupEvent(element);
+				}
+			});
+		}
+
+		function setupEvent(element) {
+
+			if (!element.iconSize){
+				element.iconSize = [70,70];
+			}
+			if(!element.popupAnchor){
+				element.popupAnchor = [0, -35];
+			}
+
+			let m = setupWithMarker(element, 20);
+
+			let a = new Event(element.name, element.content,m,element.yearRange);
+
+			agents.push(a);
+
+			createTimelineEvent(a.profile.yearRange[0], element.name);
+
+			setupWithMarker(element);
+		}
+
+		function setupCity(element) {
+			if (!element.iconSize){
+				element.iconSize = [70,70];
+			}
+			if(!element.iconAnchor){
+				element.iconAnchor = [35,60];
+			}
+			if(!element.popupAnchor){
+				element.popupAnchor = [0, -70];
+			}
+			let m = setupWithMarker(element);
+
+			let a = new City(element.name, element.content,m,element.yearRange);
+
+			agents.push(a);
+		}
+
+		function setupPerson(element) {
+
+			if (!element.iconSize){
+				element.iconSize = [70,70];
+			}
+			if(!element.iconAnchor){
+				element.iconAnchor = [35,35];
+			}
+			if(!element.popupAnchor){
+				element.popupAnchor = [0, -40];
+			}
+
+			let m = setupWithMarker(element, 10);
+
+			let a = new Person(element.name, element.content,m,element.yearRange);
+
+			agents.push(a);
+		}
+
+		function setupWithMarker(element, zOffset = 0) {
+			let icon = L.icon({
+				iconUrl: element.iconUrl,
+				iconSize: element.iconSize,
+				iconAnchor: element.iconAnchor,
+				popupAnchor: element.popupAnchor
+			});
+			let m = L.marker(element.coordinates, {
+				icon,
+				zIndexOffset: zOffset
+			});
+
+			m.bindPopup((L.popup({
+				lazyload: '<iframe id = "'+element.name+'" src="./agents/agent.html"></iframe>'
+			})));
+
+			/*if (element.type == 'city') {
+				m.bindTooltip(element.name, { permanent: true, opacity:0.9 });
+			}*/
+			return m;
+		}
+
+		/*
+		L.geoJSON(names, {
+		}).addTo(map);
+		*/
+		map.on('popupopen', function(e) {
+			let popen = e.popup;
+			if (popen.options.lazyload) {
+				popen.setContent(popen.options.lazyload);
+				currentPopupFrame = popen._contentNode.firstChild;
+				currentPopupName = currentPopupFrame.id;
+				currentPopup = findAgent(currentPopupName);
+			}
+		});
+
+		timeline.oninput = updateYear;
+
+		function updateYear() {
+			mapYear = timeline.value;
+			yearTracker.innerHTML = "Year: " + mapYear + "AD";
+			updateAgents();
+		}
+
+		function updateAgents() {
+			agents.forEach(function(a) {
+				if(a.marker._latlng){
+					if(a.profile.yearRange[0]<=mapYear && a.profile.yearRange[1]>=mapYear) {
+						a.marker.addTo(map);
+					}else{
+						a.marker.remove();
+					}
+				}
+			});
+		}
+
+		class Agent {
+			constructor(name, content,type=null, yearRange=[-4000,3000]) {
+				this.profile = new Profile(name,content,type,yearRange);
+			}
+		}
+
+		class Profile {
+			constructor(name,content,type=null, yearRange=[-4000,3000]) {
+				this.name = name;
+				this.content = content;
+				this.type = type;
+				this.yearRange = yearRange;
+			}
+		}
+
+		class City extends Agent {
+			constructor(name, content, marker,yearRange){
+				super(name, content, 'City',yearRange);
+				this.marker = marker;
+			}
+		}
+
+		class Person extends Agent {
+			constructor(name, content, marker,yearRange){
+				super(name, content, 'Person',yearRange);
+				this.marker = marker;
+			}
+		}
+
+		class Event {
+			constructor(name, content,marker,yearRange=[-4000,3000]) {
+				this.profile = new Profile(name,content,'Event',yearRange);
+				this.type = 'Event';
+				this.marker = marker;
+			}
+		}
+
+	</script>
+
+
+
+</body>
+
+</html>

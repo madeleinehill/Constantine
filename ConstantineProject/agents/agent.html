@@ -1,0 +1,105 @@
+<html>
+
+  <head>
+      <meta charset="utf-8"/>
+    	<link rel="stylesheet" href="../css/agents.css"/>
+  </head>
+
+  <body id = "main">
+    <div>
+      <h1 id = "name">Name Here</h1>
+      <p class = 'type' id = "type"></p>
+    </div>
+    <hr>
+    <div class = "tab" id = "tab">
+    </div>
+    <hr>
+
+    <script>
+      window.addEventListener("message", addData, false);
+      requestData();
+
+      function requestData() {
+        parent.postMessage('current', '*');
+      }
+
+      function addData(event) {
+        document.getElementById('name').innerHTML = event.data.name;
+        if (event.data.type == 'Event') {
+          if (event.data.yearRange[0] == event.data.yearRange[1]){
+            document.getElementById('type').innerHTML = event.data.yearRange[0] +' AD';
+          }else{
+            document.getElementById('type').innerHTML = event.data.yearRange[0] +'-'+event.data.yearRange[1] +' AD';
+          }
+        } else {
+          document.getElementById('type').innerHTML = event.data.type;
+        }
+
+
+        addTabs(event.data.content);
+      }
+
+      function addTabs(content, index = 0) {
+        let tab = content[index];
+
+        let path = tab.source;
+        let xhttp = new XMLHttpRequest();
+        let data = null;
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+
+            let c = document.createElement("DIV");
+            c.id = tab.title;
+            c.style.display = 'none';
+            c.innerHTML = this.responseText;
+
+            if (tab.att) {
+              let s = document.createElement("SPAN");
+              s.innerHTML = tab.att;
+              s.setAttribute("class","attribution");
+              c.children[0].style.marginBottom = 0;
+              c.appendChild(s);
+            }
+
+            document.getElementById('main').appendChild(c);
+
+            let b = document.createElement("BUTTON");
+            b.className = "tablinks"
+            b.addEventListener("click", function(event) {openTab(event, tab.title)});
+            b.innerHTML = tab.title;
+            document.getElementById('tab').appendChild(b);
+
+            if (document.getElementById('tab').children.length == 1) {
+              b.click();
+            }
+
+            if (index<content.length-1) {
+              addTabs(content, index+1);
+            }
+         }
+        };
+        xhttp.open("GET", path, true);
+        xhttp.send();
+      }
+
+      function openTab(evt, tabName) {
+         let i, tabcontent, tablinks;
+         tabs = document.getElementById('tab').children;
+         for (i = 0; i < tabs.length; i++) {
+             document.getElementById(tabs[i].innerHTML).style.display = "none";
+         }
+         tablinks = document.getElementById('tab').children;
+         for (i = 0; i < tablinks.length; i++) {
+             tablinks[i].className = tablinks[i].className.replace(" active", "");
+         }
+
+         document.getElementById(tabName).style.display = "block";
+         evt.currentTarget.className += " active";
+      }
+
+
+    </script>
+  </body>
+
+
+</html>
