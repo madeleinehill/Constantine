@@ -382,10 +382,11 @@
 			}
 		}
 
-		class Event {
+		class Event { // shouldn't Event extend Agent?
 			constructor(name, content,marker,yearRange=[-4000,3000]) {
+				// I was wondering if the line below could be super(name,content,'Event',yearRange);
 				this.profile = new Profile(name,content,'Event',yearRange);
-				this.type = 'Event';
+				this.type = 'Event'; // doesn't profile contain an attribute for type?
 				this.marker = marker;
 			}
 		}
