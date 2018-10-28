@@ -189,16 +189,48 @@
 		var currentPopupFrame = null;
 		var currentPopupName = null;
 		var currentPopup = null;
+		var agentsGraph = null;
 
 		window.addEventListener("message", receiveMessage, false);
 
 		updateYear();
 
 		function receiveMessage(event) {
+
 			if (event.data == "current") {
 				currentPopupFrame.contentWindow.postMessage(currentPopup.profile, '*');
-			} else {
+			}
+			// } else if (event.data == "graphdata") {
+			// 	//console.log(agentsGraph.neighbors(currentPopup.profile.name));
+			// 	//currentPopupFrame.contentWindow.postMessage(agentsGraph.neighbors(currentPopup.profile.name), '*');
+			// } 
+			// // else if (event.data == "switchnode"){
+			// // 	let target = findAgent("Edict of Milan", "event").marker;
+			// // 	console.log('Go to other event!');
+			// 	console.log(target);
+			// 	timeline.value = 313;
+			// 	updateYear();
+			// 	target.openPopup();
+				
+			// } 
+			else {
+
+
+				console.log(event.data);
+				agent = findAgent(event.data);
+				console.log(agent);
+
 				let target = findAgent(event.data).marker;
+
+
+				console.log(target);
+
+
+				timeline.value = agent.profile.yearRange[0];
+				updateYear();
+
+
+
 				target.openPopup();
 			}
 		}
@@ -228,6 +260,11 @@
 		}
 
 		function addAgents(data) {
+			
+			// I'll need this to test some things out... 
+			agentsGraph = new AgentsGraph();
+			console.log('Created agentsGraph');
+
 			data.forEach(function(element) {
 				let a;
 
@@ -238,7 +275,39 @@
 				}else if (element.type=='event' || element.type=='Event') {
 					setupEvent(element);
 				}
+
+				// I'll need this to test some things out too... haha
+				agentsDummyDatabase.set(element.name, element);
+				agentsGraph.addVertex(element.name);
+				
+
 			});
+			
+			// ** Will do this manually **FOR NOW** but need to figure it out properly later**
+			// I just wanna see how the agentsGraph data structure looks like
+			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Constantine');
+			//agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor', 'Eboracum'); // Not actually modeled as a city yet...
+			agentsGraph.addAdjacentAgent('Constantine','Rome');
+			//agentsGraph.addAdjacentAgent('Constantine', 'Milan'); // Not actually modeled as a city yet...
+			agentsGraph.addAdjacentAgent('Constantine', 'Edict of Milan');
+			agentsGraph.addAdjacentAgent('Constantine','Constantinople');
+			// want to relate edict of milan to linicius
+			// want to relate edict of milan to milan
+			// want to relate linicius to rome
+			// want to relate linicius to milan.
+			// just to have toy data...
+
+
+			// Let's also add some subsequent events
+			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Edict of Milan',true);
+
+			// Let's how that graph looks like...
+			console.log(agentsGraph);
+			console.log(agents);
+			console.log(agentsDummyDatabase);
+
+
+
 		}
 
 		function setupEvent(element) {
@@ -324,11 +393,21 @@
 		}).addTo(map);
 		*/
 		map.on('popupopen', function(e) {
+
+			console.log('popupopen!');
+			console.log(e);
 			let popen = e.popup;
 			if (popen.options.lazyload) {
 				popen.setContent(popen.options.lazyload);
+				// *** little experiment here ***
+				console.log(popen.options.lazyload)
+
+				popen.setContent(popen.options.lazyload += '<div><p>Hello World</p></div>');
+				// ******
+
 				currentPopupFrame = popen._contentNode.firstChild;
 				currentPopupName = currentPopupFrame.id;
+				console.log(currentPopupName); // Will need this for a second.
 				currentPopup = findAgent(currentPopupName);
 			}
 		});
@@ -382,14 +461,107 @@
 			}
 		}
 
-		class Event { // shouldn't Event extend Agent?
-			constructor(name, content,marker,yearRange=[-4000,3000]) {
-				// I was wondering if the line below could be super(name,content,'Event',yearRange);
-				this.profile = new Profile(name,content,'Event',yearRange);
-				this.type = 'Event'; // doesn't profile contain an attribute for type?
+		// class Event { // shouldn't Event extend Agent?
+		// 	constructor(name, content,marker,yearRange=[-4000,3000]) {
+		// 		// I was wondering if the line below could be super(name,content,'Event',yearRange);
+		// 		this.profile = new Profile(name,content,'Event',yearRange);
+		// 		this.type = 'Event'; // doesn't profile contain an attribute for type?
+		// 		this.marker = marker;
+		// 	}
+		// }
+		class Event extends Agent {
+			constructor(name, content, marker, yearRange=[-4000,3000]){
+				super(name, content, 'Event', yearRange);
 				this.marker = marker;
 			}
 		}
+
+
+
+		class Graph {
+
+			constructor() {
+				this.AdjList = new Map();
+			}
+
+			addVertex(vertex) {
+				// Remember that AdjList is a javascript Map (a dictionary)
+				// So we use the vertex as the key. The adjacency list (of more vertices) is the value.
+				this.AdjList.set(vertex, [])
+				
+			}
+
+			addUndirectedEdge(vertex1, vertex2) {
+				// vertx1 towards vertex2
+				this.AdjList.get(vertex1).push(vertex2);
+				// vertex2 towards vertex1, as graph is undirected.
+				this.AdjList.get(vertex2).push(vertex1);
+			}
+
+			addDirectedEdge(fromVertex, toVertex){
+				// fromVertex towards toVertex
+				this.AdjList.get(fromVertex).push(toVertex);
+			}
+
+			neighbors(vertex) {
+
+				return this.AdjList.get(vertex);
+			}
+
+
+		}
+
+
+		var agentsDummyDatabase = new Map();
+		class AgentsGraph extends Graph {
+
+
+			retrieveAgentFromDatabase(agentID){
+				return agentsDummyDatabase.get(agentID);
+			}
+
+			adjacentAgents(agentID, type=null) {
+				
+				// List of adjacent agents that will be returned
+				var adjAgentsList = []
+				
+				// We iterate adjacency list of the vertex 
+				for (var i = 0, size = super.neighbors(agentID).size; i < size; i++) {
+					
+					// With the adjAgentID
+					adjAgentID =  super.neighbors(agentID)[i];
+					// We can retrieve Agent Object from database
+					adjAgent = retrieveAgentFromDatabase(adjAgentID);
+
+
+					if ( adjAgent.type == type || type == null){
+						adjAgentsList.push(adjAgent)
+					}
+				}
+
+				return adjAgentsList; // these are actual Agent objects.
+		
+				
+			}
+
+
+			// I think that I'll get rid of this function and just use the corresponding method(s) from the parent class...
+			addAdjacentAgent(agentID, adjAgentID, directedRelation = false) {
+
+				if (directedRelation == false){
+					super.addUndirectedEdge(agentID, adjAgentID);
+				} else {
+					// implement code for directed edges in Graph class
+					super.addDirectedEdge(agentID,adjAgentID);
+				}
+			}
+
+
+		}
+
+
+
+
 
 	</script>
 
