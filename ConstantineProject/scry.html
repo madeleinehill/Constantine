@@ -199,13 +199,14 @@
 
 			if (event.data == "current") {
 				currentPopupFrame.contentWindow.postMessage(currentPopup.profile, '*');
-			} else if (event.data == "graphdata") {
-				//console.log(agentsGraph.neighbors(currentPopup.profile.name));
-				//currentPopupFrame.contentWindow.postMessage(agentsGraph.neighbors(currentPopup.profile.name), '*');
-			} 
-			// else if (event.data == "switchnode"){
-			// 	let target = findAgent("Edict of Milan", "event").marker;
-			// 	console.log('Go to other event!');
+			}
+			// } else if (event.data == "graphdata") {
+			// 	//console.log(agentsGraph.neighbors(currentPopup.profile.name));
+			// 	//currentPopupFrame.contentWindow.postMessage(agentsGraph.neighbors(currentPopup.profile.name), '*');
+			// } 
+			// // else if (event.data == "switchnode"){
+			// // 	let target = findAgent("Edict of Milan", "event").marker;
+			// // 	console.log('Go to other event!');
 			// 	console.log(target);
 			// 	timeline.value = 313;
 			// 	updateYear();
@@ -213,13 +214,23 @@
 				
 			// } 
 			else {
+
+
 				console.log(event.data);
 				agent = findAgent(event.data);
 				console.log(agent);
+
 				let target = findAgent(event.data).marker;
+
+
 				console.log(target);
+
+
 				timeline.value = agent.profile.yearRange[0];
 				updateYear();
+
+
+
 				target.openPopup();
 			}
 		}
