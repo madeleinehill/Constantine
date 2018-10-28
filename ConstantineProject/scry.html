@@ -197,6 +197,14 @@
 		function receiveMessage(event) {
 			if (event.data == "current") {
 				currentPopupFrame.contentWindow.postMessage(currentPopup.profile, '*');
+			} else if (event.data == "switchnode"){
+				let target = findAgent("Edict of Milan", "event").marker;
+				console.log('Go to other event!');
+				console.log(target);
+				timeline.value = 313;
+				updateYear();
+				target.openPopup();
+				
 			} else {
 				let target = findAgent(event.data).marker;
 				target.openPopup();
