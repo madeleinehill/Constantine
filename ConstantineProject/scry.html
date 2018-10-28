@@ -265,8 +265,14 @@
 			// want to relate linicius to milan.
 			// just to have toy data...
 
+
+			// Let's also add some subsequent events
+			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Edict of Milan',true);
+
 			// Let's how that graph looks like...
 			console.log(agentsGraph);
+			console.log(agents);
+			console.log(agentsDummyDatabase);
 
 
 
@@ -355,11 +361,21 @@
 		}).addTo(map);
 		*/
 		map.on('popupopen', function(e) {
+
+			console.log('popupopen!');
+			console.log(e);
 			let popen = e.popup;
 			if (popen.options.lazyload) {
 				popen.setContent(popen.options.lazyload);
+				// *** little experiment here ***
+				console.log(popen.options.lazyload)
+
+				popen.setContent(popen.options.lazyload += '<div><p>Hello World</p></div>');
+				// ******
+
 				currentPopupFrame = popen._contentNode.firstChild;
 				currentPopupName = currentPopupFrame.id;
+				console.log(currentPopupName); // Will need this for a second.
 				currentPopup = findAgent(currentPopupName);
 			}
 		});
@@ -450,6 +466,11 @@
 				this.AdjList.get(vertex2).push(vertex1);
 			}
 
+			addDirectedEdge(fromVertex, toVertex){
+				// fromVertex towards toVertex
+				this.AdjList.get(fromVertex).push(toVertex);
+			}
+
 			neighbors(vertex) {
 
 				return this.AdjList.get(vertex);
@@ -499,11 +520,10 @@
 					super.addUndirectedEdge(agentID, adjAgentID);
 				} else {
 					// implement code for directed edges in Graph class
+					super.addDirectedEdge(agentID,adjAgentID);
 				}
-
-				
-
 			}
+
 
 		}
 

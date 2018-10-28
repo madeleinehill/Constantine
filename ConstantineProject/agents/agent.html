@@ -13,6 +13,9 @@
     <hr>
     <div class = "tab" id = "tab">
     </div>
+    <div>
+        <p class = 'graphdata' id = "graphdata"></p>
+    </div>
     <hr>
 
     <script>
@@ -24,19 +27,27 @@
       }
 
       function addData(event) {
+
+        // Modify header of popup
         document.getElementById('name').innerHTML = event.data.name;
+        // If an event
         if (event.data.type == 'Event') {
+          // 1 Year event
           if (event.data.yearRange[0] == event.data.yearRange[1]){
             document.getElementById('type').innerHTML = event.data.yearRange[0] +' AD';
-          }else{
+          }else{ // Event with a range of years
             document.getElementById('type').innerHTML = event.data.yearRange[0] +'-'+event.data.yearRange[1] +' AD';
           }
+        // Not an event
         } else {
           document.getElementById('type').innerHTML = event.data.type;
         }
-
-
+        
+        // Add tabs to popup
         addTabs(event.data.content);
+
+        // Add graph data
+        document.getElementById('graphdata').innerHTML = event.data.name;
       }
 
       function addTabs(content, index = 0) {
