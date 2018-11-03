@@ -168,15 +168,17 @@
 			ext: 'png'
 		}).addTo(map);
 
+		// Political Layer
 		var polLyr = L.geoJSON(pol, {
 			style: polStyle
 		}).addTo(map);
 
-
+		// Water Layer
 		var wtrLyr = L.geoJSON(rvr, {
 			style: wtrStyle
 		}).addTo(map);
 
+		// All Agents
 		var agents = [];
 		getAgentsFromServer();
 
@@ -189,52 +191,40 @@
 		var currentPopupFrame = null;
 		var currentPopupName = null;
 		var currentPopup = null;
+		// Agents Graph
 		var agentsGraph = null;
 
+		// Receive messages from other windows.
 		window.addEventListener("message", receiveMessage, false);
 
+		// Move the slide to the current year/
 		updateYear();
 
 		function receiveMessage(event) {
 
 			if (event.data == "current") {
 				currentPopupFrame.contentWindow.postMessage(currentPopup.profile, '*');
-			}
-			// } else if (event.data == "graphdata") {
-			// 	//console.log(agentsGraph.neighbors(currentPopup.profile.name));
-			// 	//currentPopupFrame.contentWindow.postMessage(agentsGraph.neighbors(currentPopup.profile.name), '*');
-			// } 
-			// // else if (event.data == "switchnode"){
-			// // 	let target = findAgent("Edict of Milan", "event").marker;
-			// // 	console.log('Go to other event!');
-			// 	console.log(target);
-			// 	timeline.value = 313;
-			// 	updateYear();
-			// 	target.openPopup();
-				
-			// } 
-			else {
+			} else { // else, we're sending the name of an agent we need "to go" to.
 
-
-				console.log(event.data);
 				agent = findAgent(event.data);
-				console.log(agent);
-
-				let target = findAgent(event.data).marker;
-
-
-				console.log(target);
-
-
+				//console.log(event.data);
+				//console.log(agent);
+				let target = agent.marker; //findAgent(event.data).marker;
+				//console.log(target);
 				timeline.value = agent.profile.yearRange[0];
-				updateYear();
-
-
+				updateYear(); // otherwise, it doesn't work. Needs to be on the same year.
 
 				target.openPopup();
+
+
+
+
 			}
 		}
 
+		/** 
+		@description Finds a match for the given agent.  
+ 		*/ 
 		function findAgent(name, type = 'city') {
 				let match = agents.find(function(agent) {
 					return agent.profile.name == name;
@@ -277,7 +267,7 @@
 				}
 
 				// I'll need this to test some things out too... haha
-				agentsDummyDatabase.set(element.name, element);
+				agentsDummyDatabase.set(element.name, element); // same as Agents, but I access with the name. Unnecessary because we have findAgents().
 				agentsGraph.addVertex(element.name);
 				
 
@@ -310,6 +300,9 @@
 
 		}
 
+		/** 
+		@description Sets up icon, popupAnchor, marker, pushes agent to Agents, and creates timeline event.
+ 		*/
 		function setupEvent(element) {
 
 			if (!element.iconSize){
@@ -330,6 +323,9 @@
 			setupWithMarker(element);
 		}
 
+		/** 
+		@description Sets up icon, popupAnchor, marker, and pushes agent to Agents.
+ 		*/
 		function setupCity(element) {
 			if (!element.iconSize){
 				element.iconSize = [70,70];
@@ -347,6 +343,9 @@
 			agents.push(a);
 		}
 
+		/** 
+		@description Sets up icon, popupAnchor, marker, and pushes agent to Agents.
+ 		*/
 		function setupPerson(element) {
 
 			if (!element.iconSize){
@@ -366,6 +365,9 @@
 			agents.push(a);
 		}
 
+		/** 
+		@description .
+ 		*/
 		function setupWithMarker(element, zOffset = 0) {
 			let icon = L.icon({
 				iconUrl: element.iconUrl,
@@ -399,27 +401,34 @@
 			let popen = e.popup;
 			if (popen.options.lazyload) {
 				popen.setContent(popen.options.lazyload);
-				// *** little experiment here ***
+				// *** little experiment here *************************
 				console.log(popen.options.lazyload)
 
 				popen.setContent(popen.options.lazyload += '<div><p>Hello World</p></div>');
-				// ******
-
+				// *****************************************************
 				currentPopupFrame = popen._contentNode.firstChild;
 				currentPopupName = currentPopupFrame.id;
+				//***
 				console.log(currentPopupName); // Will need this for a second.
+				//***
 				currentPopup = findAgent(currentPopupName);
 			}
 		});
 
-		timeline.oninput = updateYear;
+		timeline.oninput = updateYear; // interesting...
 
+		/** 
+		@description Updates mapYear value and calls updateAgents().
+ 		*/
 		function updateYear() {
 			mapYear = timeline.value;
 			yearTracker.innerHTML = "Year: " + mapYear + "AD";
 			updateAgents();
 		}
 
+		/** 
+		@description Pretty much places/remove markers depending whether the agent exists between the year range..
+ 		*/
 		function updateAgents() {
 			agents.forEach(function(a) {
 				if(a.marker._latlng){
@@ -432,6 +441,8 @@
 			});
 		}
 
+
+		// CLASSES
 		class Agent {
 			constructor(name, content,type=null, yearRange=[-4000,3000]) {
 				this.profile = new Profile(name,content,type,yearRange);
@@ -517,6 +528,7 @@
 
 
 			retrieveAgentFromDatabase(agentID){
+				// I could have done this with Agents object. Unnecessary to use the dummy db
 				return agentsDummyDatabase.get(agentID);
 			}
 
