@@ -20,13 +20,19 @@
 
     <script>
       window.addEventListener("message", addData, false);
-      //window.addEventListener("graphdata", addAdjacentAgents, false);
+      //window.addEventListener("graphdata", addAdjacentAgents, false); // Not a good idea. It doesn't work that way.
       requestData();
 
+      /** 
+		  @description .
+ 		  */
       function requestData() {
         parent.postMessage('current', '*');
       }
 
+      /** 
+		  @description .
+ 		  */
       function addData(event) {
 
         // Modify header of popup
@@ -50,6 +56,9 @@
 
         // Add adjacent agents
         addAdjacentAgents(event.data.name);
+
+
+        // 
         //requestGraphData();
         //addAdjacentAgents(event.data.name);
         // // Add graph data
@@ -61,8 +70,13 @@
         //   parent.postMessage('switchnode', '*');
         //   return false;
         // }
-      }
 
+
+      }
+      
+      /** 
+		  @description .
+ 		  */
       function addTabs(content, index = 0) {
         let tab = content[index];
 
@@ -106,6 +120,9 @@
         xhttp.send();
       }
 
+      /** 
+		  @description .
+ 		  */
       function openTab(evt, tabName) {
          let i, tabcontent, tablinks;
          tabs = document.getElementById('tab').children;
@@ -122,25 +139,34 @@
       }
 
 
+      /** 
+		  @description .
+ 		  */
       function addAdjacentAgents(agentID, index=0) {
 
 
         console.log("graph data");
         console.log(parent.agentsGraph);
+        
+        // Retrieve necessary data from graph
         let graph = parent.agentsGraph;
         let neighbors = graph.neighbors(agentID);
-        
         let adjNodeID = neighbors[index];
 
-        // Add graph data
+        // Add graph data to HTML template
+
+        // Edge Link
         edge = '<a id="' + adjNodeID + '" href="http://www.google.com">' + adjNodeID + '</a>'
+        // Add html tag to the innerHTML of graphdata tag in the template
         document.getElementById('graphdata').innerHTML += edge;
+        // Add a onclick function to the element. To the link. 
         document.getElementById(adjNodeID).onclick = function() {
            // Do something cool...
-           parent.postMessage(adjNodeID, '*');
+           parent.postMessage(adjNodeID, '*'); // this will make everything 'move towards the agent'.
            return false;
         }
 
+        // Simply a **recursive call** if there are more adjacent agents to add.
         if (index < neighbors.length-1) {
             console.log("More neighbors");
             addAdjacentAgents(agentID, index+1);
