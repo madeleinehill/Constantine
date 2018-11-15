@@ -168,6 +168,8 @@
 			ext: 'png'
 		}).addTo(map);
 
+		pol = polData[267];
+
 		var polLyr = L.geoJSON(pol, {
 			style: polStyle
 		}).addTo(map);
@@ -339,6 +341,29 @@
 			mapYear = timeline.value;
 			yearTracker.innerHTML = "Year: " + mapYear + "AD";
 			updateAgents();
+
+			//remove every layer which polLyr contains from the map
+			Object.keys(polLyr._layers).forEach(function(key) {
+				element = polLyr._layers[key];
+  			map.removeLayer(element);
+			});
+
+			//assign new GeoJSON data to pol, based on the current year
+			pol = polData[mapYear]
+
+			//if the new data is a reference to another year, use the data from that year instead
+			while (typeof pol == 'number') {
+				pol = polData[pol]
+			}
+
+			//recreate polLyr with the new data in pol
+			polLyr = L.geoJSON(pol, {
+				style: polStyle
+			})
+
+			//re-add polLyr to the map
+			polLyr.addTo(map)
+
 		}
 
 		function updateAgents() {
