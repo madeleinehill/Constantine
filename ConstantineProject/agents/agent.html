@@ -56,7 +56,7 @@
         // Add tabs to popup
         addTabs(event.data.content);
         //addTabs("dummytab");
-        addSingleExtraEmptyTab("Links",event.data.name);
+        addSingleExtraEmptyTab("Events",event.data.name);
 
 
         // Add adjacent agents
@@ -87,7 +87,7 @@
         //***
         console.log("tab.title");
         console.log(tab.title);
-        console.log(event.data);
+        //console.log(event.data);
         console.log(content);
         //***
         let path = tab.source;
@@ -193,7 +193,7 @@
              tablinks[i].className = tablinks[i].className.replace(" active", "");
          }
 
-         if (tabName != "Links") {
+         if (tabName != "Events") {
           document.getElementById(tabName).style.display = "block";
           evt.currentTarget.className += " active";
          }
@@ -232,7 +232,8 @@
         // Add graph data to HTML template
 
         // Edge Link
-        edge = '<ul><a id="' + adjNodeID + '" href="http://www.google.com">' + adjNodeID + '</a></ul>'
+        edge = '<ul><a onclick="parent.postMessage(\''+ adjNodeID +'\', \'*\');"  id="' + adjNodeID + '" href="#">' + adjNodeID + '</a></ul>'
+        //edge = '<ul><a id="' + adjNodeID + '" href="http://www.google.com">' + adjNodeID + '</a></ul>'
         // Add html tag to the innerHTML of graphdata tag in the template
         //document.getElementById('graphdata').innerHTML += edge;
         console.log(document);
@@ -240,15 +241,15 @@
         console.log(document.getElementById('tab'));
 
 
-        document.getElementById('Links').innerHTML += edge; // Unprofessional, more modularization is needed.
+        document.getElementById('Events').innerHTML += edge; // Unprofessional, more modularization is needed.
         
         
         // Add a onclick function to the element. To the link. 
-        document.getElementById(adjNodeID).onclick = function() {
+        /*document.getElementById(adjNodeID).onclick = function() {
            // Do something cool...
            parent.postMessage(adjNodeID, '*'); // this will make everything 'move towards the agent'.
            return false;
-        }
+        }*/
 
         // Simply a **recursive call** if there are more adjacent agents to add.
         if (index < neighbors.length-1) {
@@ -286,11 +287,13 @@
         htmlElement.innerHTML += edge;
         // Add a onclick function to the element. To the link. 
         console.log(document);
+        console.log("Adding link...");
         document.getElementById(adjNodeID).onclick = function() {
            // Do something cool...
            parent.postMessage(adjNodeID, '*'); // this will make everything 'move towards the agent'.
            return false;
         }
+        console.log("Added link successfully..");
 
         // Simply a **recursive call** if there are more adjacent agents to add.
         if (index < neighbors.length-1) {

@@ -119,13 +119,13 @@
 	<script src="./geo/land.js" type="text/javascript"></script>
 
 	<script>
-
+		// Set slide
 		var mapPeriod = [267,330];
 		var mapYear = mapPeriod[0];
 		document.getElementById('slide').min = mapPeriod[0];
 		document.getElementById('slide').max = mapPeriod[1];
 		document.getElementById('slide').value = mapYear;
-
+		// Set the bounds of the map
 		bounds = new L.LatLngBounds(new L.LatLng(20, -50), new L.LatLng(70, 60));
 
 		var map = new L.map('map', {
@@ -135,7 +135,7 @@
 			minZoom: 4.5,
 			maxZoom: 6
 		}).setView([40, 20], 4);
-
+		// Some styles...
 		var lndStyle = {
 			"color": "#ffefdc",
 			"weight": 0,
@@ -168,13 +168,13 @@
 			ext: 'png'
 		}).addTo(map);
 
-		pol = polData[267];
-
+		pol = polData[267]; // polData is defined in geo/provinces.js - a JSON weird object...
+		// Set Political Layer - based on pol (data) and polStyle
 		var polLyr = L.geoJSON(pol, {
 			style: polStyle
 		}).addTo(map);
 
-		// Water Layer
+		// Set Water Layer - based on rvr (data) and wtrStyle
 		var wtrLyr = L.geoJSON(rvr, {
 			style: wtrStyle
 		}).addTo(map);
@@ -276,12 +276,14 @@
 			
 			// ** Will do this manually **FOR NOW** but need to figure it out properly later**
 			// I just wanna see how the agentsGraph data structure looks like
-			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Constantine');
+			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Rome');
+			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Constantinople');
 			//agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor', 'Eboracum'); // Not actually modeled as a city yet...
-			agentsGraph.addAdjacentAgent('Constantine','Rome');
+			agentsGraph.addAdjacentAgent('Edict of Milan','Rome');
 			//agentsGraph.addAdjacentAgent('Constantine', 'Milan'); // Not actually modeled as a city yet...
-			agentsGraph.addAdjacentAgent('Constantine', 'Edict of Milan');
-			agentsGraph.addAdjacentAgent('Constantine','Constantinople');
+			agentsGraph.addAdjacentAgent('Edict of Milan', 'Constantinople');
+			//agentsGraph.addAdjacentAgent('Constantinople','Edict of Milan');
+			agentsGraph.addAdjacentAgent('Rome','Constantinople');
 			// want to relate edict of milan to linicius
 			// want to relate edict of milan to milan
 			// want to relate linicius to rome
@@ -419,7 +421,7 @@
 		timeline.oninput = updateYear; // interesting...
 
 		/** 
-		@description Updates mapYear value and calls updateAgents().
+		@description Updates mapYear value and calls updateAgents(). And also updates political layer.
  		*/
 		function updateYear() {
 			mapYear = timeline.value;
@@ -554,6 +556,7 @@
 			retrieveAgentFromDatabase(agentID){
 				// I could have done this with Agents object. Unnecessary to use the dummy db
 				return agentsDummyDatabase.get(agentID);
+				// return Agents.get(agentID); // or something like that
 			}
 
 			adjacentAgents(agentID, type=null) {
