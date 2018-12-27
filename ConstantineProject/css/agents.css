@@ -42,7 +42,8 @@ p {
 
 }
 a {
-  font: 11px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+  /* font is inconsistent with Times new Roman*/
+  /*font: 11px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;*/
   color: #0078A8;
 	text-decoration: none;
 }
