@@ -54,13 +54,13 @@
         }
         
         // Add tabs to popup
-        addTabs(event.data.content);
+        addTabs(event.data.content, event.data.name);
         //addTabs("dummytab");
-        addSingleExtraEmptyTab("Events",event.data.name);
+        //addSingleExtraEmptyTab("Events",event.data.name);
 
 
         // Add adjacent agents
-        addAdjacentAgents(event.data.name);
+        //addAdjacentAgents(event.data.name);
 
 
         // 
@@ -82,7 +82,7 @@
       /** 
 		  @description .
  		  */
-      function addTabs(content, index = 0) {
+      function addTabs(content, evtName = null, index = 0) {
         let tab = content[index];
         //***
         console.log("tab.title");
@@ -123,27 +123,67 @@
             }
 
             if (index<content.length-1) {
-              addTabs(content, index+1);
+              addTabs(content, evtName, index+1);
             }
+            // } else {
+            //   addSingleExtraEmptyTab("Events",evtName);
+            // }
+            
+            if (index >= content.length-1) {
+              addSingleExtraEmptyTab("»","»",evtName);
+            }
+
          }
+
         };
         xhttp.open("GET", path, true);
         xhttp.send();
+        
+        
+
       }
 
 
       /** 
 		  @description .
  		  */
-      function addSingleExtraEmptyTab(tabTitle,agentID){
+      function addSingleExtraEmptyTab(tabText, tabID, agentID){
+
+        // // Moral: DO NOT EVER MAKE ANOTHER xmlhttprequest inside another one... 
+        // let c = document.createElement("DIV");
+        // c.id = tabTitle;//tab.title;
+        // c.style.display = 'none';
+        // c.innerHTML = this.responseText;
+
+        // //document.getElementById('main').appendChild(c);
+        // document.getElementById('tabscontent').appendChild(c);
+
+        // let b = document.createElement("BUTTON");
+        // b.className = "tablinks"
+        // b.addEventListener("click", function(event) {openTab(event, tabTitle, agentID)});
+        // b.innerHTML = tabTitle;
+        // document.getElementById('tab').appendChild(b);
+
+        // if (document.getElementById('tab').children.length == 1) {
+        //   b.click();
+        // }
+
+        // // let's actually save it in a variable
+        // var graphLinks = c;
+        // console.log("Graph Links");
+        // console.log(graphLinks);
+
+
+
         let xhttp = new XMLHttpRequest();
         let data = null;
+        //let path = tab.source;
         
         xhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
 
             let c = document.createElement("DIV");
-            c.id = tabTitle;//tab.title;
+            c.id = tabID//tabTitle;//tab.title;
             c.style.display = 'none';
             c.innerHTML = this.responseText;
 
@@ -152,8 +192,8 @@
 
             let b = document.createElement("BUTTON");
             b.className = "tablinks"
-            b.addEventListener("click", function(event) {openTab(event, tabTitle, agentID)});
-            b.innerHTML = tabTitle;
+            b.addEventListener("click", function(event) {openTab(event, tabID, agentID)});
+            b.innerHTML = tabText;
             document.getElementById('tab').appendChild(b);
 
             if (document.getElementById('tab').children.length == 1) {
@@ -193,7 +233,7 @@
              tablinks[i].className = tablinks[i].className.replace(" active", "");
          }
 
-         if (tabName != "Events") {
+         if (tabName != "Events" & tabName != "»") {
           document.getElementById(tabName).style.display = "block";
           evt.currentTarget.className += " active";
          }
@@ -233,7 +273,7 @@
         // Add graph data to HTML template
 
         // Edge Link
-        edge = '<ul><a onclick="parent.postMessage(\''+ adjNodeID +'\', \'*\');"  id="' + adjNodeID + '" href="#">' + adjNodeID + '</a></ul>'
+        edge = '<ul><p><a onclick="parent.postMessage(\''+ adjNodeID +'\', \'*\');"  id="' + adjNodeID + '" href="#">' + adjNodeID + '</a></p></ul>'
         //edge = '<ul><a id="' + adjNodeID + '" href="http://www.google.com">' + adjNodeID + '</a></ul>'
         // Add html tag to the innerHTML of graphdata tag in the template
         //document.getElementById('graphdata').innerHTML += edge;
@@ -242,8 +282,8 @@
         console.log(document.getElementById('tab'));
 
 
-        document.getElementById('Events').innerHTML += edge; // Unprofessional, more modularization is needed.
-        
+        //document.getElementById('Events').innerHTML += edge; // Unprofessional, more modularization is needed.
+        document.getElementById('»').innerHTML += edge;
         
         // Add a onclick function to the element. To the link. 
         /*document.getElementById(adjNodeID).onclick = function() {
