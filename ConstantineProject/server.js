@@ -55,8 +55,8 @@ app.get('/agents.datastore', function(req, res) {
             next(err);
             return;
         }
-        console.log("entities in server");
-        console.log(entities);
+        //console.log("entities in server");
+        //console.log(entities);
         res.send(entities);
     });
 
@@ -65,7 +65,48 @@ app.get('/agents.datastore', function(req, res) {
 });
 
 
+/**
+ * POST createAgent.datastore
+ * 
+ * Create a new agent
+ */
+app.post('/createAgent.datastore', (req, res, next) => {
+    
+    console.log("req.body");
+    console.log(req.body);
 
+    console.log("content");
+    console.log(req.body.content);
+    
+    
+    // It is already parsed!!!
+    /*console.log("parsed json");    
+    console.log(JSON.parse(req.body));*/
+    
+    getModel().create(req.body, (err, entity) => {
+        if (err) {
+            next(err);
+            return;
+        }
+        res.json(entity); // or res.send(entity); ?
+    });
+});
+
+
+/**
+ * PUT updateAgent.datastore
+ * 
+ * Update an agent
+*/
+app.put('updateAgent.datastore', (req, res, next) => {
+    getModel().update(req.params.agent, req.body, (err, entity) => {
+        if (err) {
+            next(err);
+            return;
+        }
+        res.json(entity); // or res.send(entity); ?
+    });
+});
 
 
 // instead of app.get('port') only... use 
