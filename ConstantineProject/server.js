@@ -12,6 +12,13 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 
+
+function getModel() {
+    return require(`./public/agents/model-${require('./config').get('DATA_BACKEND')}`);
+}
+
+
+
 app.set('port', (process.env.PORT || 8000));
 
 app.use('/', express.static(path.join(__dirname, 'public'), {index: 'scry.html'}));
@@ -39,6 +46,26 @@ app.use(function(req, res, next){
 //     next();
 // });
 // Adding {index: 'scry.html'} in the options parameter did the job!
+
+
+app.get('/agents.datastore', function(req, res) {
+    
+    getModel().list(10, req.query.pageToken, (err, entities, cursor) => {
+        if (err) {
+            next(err);
+            return;
+        }
+        console.log("entities in server");
+        console.log(entities);
+        res.send(entities);
+    });
+
+
+    
+});
+
+
+
 
 
 // instead of app.get('port') only... use 

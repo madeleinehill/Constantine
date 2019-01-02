@@ -1,1 +1,1 @@
-<img src = "../images/constantinople.png"></img>
+<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Byzantine_Constantinople-en.png/800px-Byzantine_Constantinople-en.png"></img>

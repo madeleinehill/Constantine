@@ -7,7 +7,7 @@
 							"source":"./data/descriptions/constantinople.description.txt",
 							"att":null},
 						 {"title":"Picture",
-							"source":"./data/pictures/constantinople.picture.txt",
+							"source":"https://en.wikipedia.org/wiki/Constantinople#/media/File:Byzantine_Constantinople-en.png",
 							"att":"<a href = 'https://en.wikipedia.org/wiki/Constantinople#/media/File:Byzantine_Constantinople-en.png' target='_blank'>Content from Wikipedia</a>"}],
 	  "coordinates" : [41, 28.98],
 		"iconUrl": "./agents/icons/constantinople.png"
