@@ -1,0 +1,78 @@
+<html>
+
+    <head>
+            <meta charset="utf-8"/>
+            <!--link rel="stylesheet" href-"../css/edit-agent.css"/-->
+            <link rel="stylesheet" href="../css/agents.css"/>
+            <link rel="stylesheet" href="../css/leaflet.css" />
+            <link rel="stylesheet" href="../css/leaflet-sidebar.css" />
+            <link rel="stylesheet" href="../css/timeline.css" />
+
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    </head>
+
+    <div class="paper">
+        <!--label>Edit exiting historical agent</label>
+        <p id="editAgent.currentName"></p>
+        <p id="editAgent.id"></p>
+        </br></br-->
+        <!--h3>Create new historical agent:</h3-->
+        <label id="editAgent.name">Name:
+                <input type="text" name="name" id="name" placeholder="Venice"/>
+        </label>
+        </br></br>
+        <label id="editAgent.type">Type:
+                <!--input type="checkbox" name="check" onclick="onlyOne(this)" id="city">City</input>
+                <input type="checkbox" name="check" onclick="onlyOne(this)" id="person">Person</input>
+                <input type="checkbox" name="check" onclick="onlyOne(this)" id="event">Event</input-->
+                <select>
+                        <option value="city">City</option>
+                        <option value="person">Person</option>
+                        <option value="event">Event</option>
+                </select> 
+        </label>
+        </br></br>
+        <label id="editAgent.yearRange">Year Range:
+                </br>
+                <input type="number" name="yearRange1" id="yearRange1" placeholder="272"/>
+                -
+                <input type="number" name="yearRange2" id="yearRange2" placeholder="337"/>
+        </label>
+        </br></br>
+        <label id="editAgent.coordinates">Coordinates:
+                </br>
+                <input type="number" name="coordinates1" id="coordinates1" placeholder="45"/>
+                -
+                <input type="number" name="coordinates2" id="coordinates2" placeholder="15"/>
+        </label>
+        </br></br>
+        <label id="editAgent.description">Description:
+                <!--input type="text" name="description" id="description" value="Flavia Maxima Fausta (289–326) was a Roman Empress, daughter of the Roman Emperor Maximianus."/-->
+                <textarea rows="2" cols="40" name="description" id="description" placeholder="Venice is a city in northeastern Italy and the capital of the Veneto region."></textarea>
+                Attribution:<input type="url" name="description.att" id="description.att" placeholder="https://en.wikipedia.org/wiki/Venice"/>
+        </label>
+        </br></br>
+        <label id="editAgent.picture">Picture:
+                <input type="file" name="picture" id="picture"/>
+                </br>
+                Attribution:<input type="url" name="picture.att" id="picture.att" placeholder="https://en.wikipedia.org/wiki/Venice#/media/File:Collage_Venezia.jpg"/>
+        </label>
+        </br></br>
+        <label id="editAgent.icon">Icon:
+                <input type="file" name="icon" id="icon"/>
+        </label>
+        </br></br>
+        <button id="updateAgentButton" type="button"><strong>Update Historical Agent</strong></button>
+
+
+
+    </div>
+
+
+    <script>
+    
+        document.getElementById("editAgent.coordinates").style.display = "none";
+    
+    
+    </script>
+</html>

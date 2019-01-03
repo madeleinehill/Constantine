@@ -50,6 +50,7 @@
 			</ul>
 
 			<ul role="tablist">
+				<li><a href="#add" role="tab"><i class="fa fa-plus-circle"></i></a></li>
 				<li><a href="#edit" role="tab"><i class="fa fa-pencil"></i></a></li>
 				<li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
 			</ul>
@@ -90,60 +91,68 @@
 				</div>
 			</div>
 
-			<div class="sidebar-pane" id="edit">
+			<div class="sidebar-pane" id="add">
 				<h1 class="sidebar-header">
 							<div class = "shader">Edit</div>
 							<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
 						</h1>
 				<div class="paper">
+				
 					<p>Create new historical agent</p>
 					</br></br>
 					<!--h3>Create new historical agent:</h3-->
+				
+				<div id="createAgentFormDiv"></div>
+				<template id="updateAgentForm">
 					<label>Name:
-							<input type="text" name="name" id="name" value="Fausta"/>
+							<input type="text" id="updateAgentForm.name" placeholder="Venice"/>
 					</label>
 					</br></br>
 					<label>Type:
-							<input type="checkbox" name="person" id="person">Person</input>
-							<input type="checkbox" name="city" id="city">City</input>
-							<input type="checkbox" name="event" id="event">Event</input>
+							<!--input type="checkbox" name="check" onclick="onlyOne(this)" id="city">City</input>
+							<input type="checkbox" name="check" onclick="onlyOne(this)" id="person">Person</input>
+							<input type="checkbox" name="check" onclick="onlyOne(this)" id="event">Event</input-->
+							<select>
+									<option value="city">City</option>
+									<option value="person">Person</option>
+									<option value="event">Event</option>
+							</select> 
 					</label>
 					</br></br>
 					<label>Year Range:
-							</br>
-							<input type="number" name="yearRange1" id="yearRange1" value="272"/>
+							<!--/br-->
+							<input type="number" name="yearRange1" id="yearRange1" placeholder="272" style="width:50px;"/>
 							-
-							<input type="number" name="yearRange2" id="yearRange2" value="337"/>
+							<input type="number" name="yearRange2" id="yearRange2" placeholder="337" style="width:50px;"/>
 					</label>
 					</br></br>
 					<label>Coordinates:
-							</br>
-							<input type="number" name="coordinates1" id="coordinates1" value="272"/>
+							<!--/br-->
+							<input type="number" name="coordinates1" id="coordinates1" placeholder="45" style="width:50px;"/>
 							-
-							<input type="number" name="coordinates2" id="coordinates2" value="337"/>
+							<input type="number" name="coordinates2" id="coordinates2" placeholder="15" style="width:50px;"/>
 					</label>
 					</br></br>
 					<label>Description:
 							<!--input type="text" name="description" id="description" value="Flavia Maxima Fausta (289–326) was a Roman Empress, daughter of the Roman Emperor Maximianus."/-->
-							<textarea rows="2" cols="40" name="description" id="description">Flavia Maxima Fausta (289–326) was a Roman Empress, daughter of the Roman Emperor Maximianus.
-							</textarea>
-							Attribution:<input type="url" name="description.att" id="description.att"/>
+							<textarea rows="2" cols="40" name="description" id="description" placeholder="Venice is a city in northeastern Italy and the capital of the Veneto region."></textarea>
+							Attribution:<input type="url" name="description.att" id="description.att" placeholder="https://en.wikipedia.org/wiki/Venice"/>
 					</label>
 					</br></br>
 					<label>Picture:
 							<input type="file" name="picture" id="picture"/>
 							</br>
-							Attribution:<input type="url" name="picture.att" id="picture.att"/>
+							Attribution:<input type="url" name="picture.att" id="picture.att" placeholder="https://en.wikipedia.org/wiki/Venice#/media/File:Collage_Venezia.jpg"/>
 					</label>
 					</br></br>
 					<label>Icon:
 							<input type="file" name="icon" id="icon"/>
 					</label>
 					</br></br>
-					<button id="createAgentButton" type="button"><strong>Create Historical Agent</strong></button>
-
-
-
+					
+				</template>
+				
+				<button id="createAgentButton" type="button"><strong>Create Historical Agent</strong></button>
 
 
 					<!--strong><p>Create new historical agent.</p></strong>
@@ -164,6 +173,50 @@
 					
 				</div>
 			</div>
+
+
+
+			<div class="sidebar-pane" id="edit">
+					<h1 class="sidebar-header">
+								<div class = "shader">Edit</div>
+								<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+							</h1>
+					<div class="paper">
+						<p>Edit existing historical agents</p>
+						</br></br>
+						<!--h3>Create new historical agent:</h3-->
+						<!--label>Name:
+								<input type="text" name="name" id="name" value="Venice"/>
+						</label-->
+						<!--/br></br-->
+						<label>Type:
+								<input type="checkbox" name="check" onclick="onlyOne(this)" id="city">City</input>
+								<input type="checkbox" name="check" onclick="onlyOne(this)" id="person">Person</input>
+								<input type="checkbox" name="check" onclick="onlyOne(this)" id="event">Event</input>
+								</br></br>
+								<select size="5" id="agentsList">
+								</select> 
+						</label>
+						</br>
+						<p id="edit.name"></p>
+						<p id="edit.id"></p>
+						
+
+						<div id="editAgentFormDiv"></div>
+
+						<!--div class="paper"><iframe id = "editAgentFrame" src="./agents/edit-agent.html"></iframe></div-->
+	
+						<button id="updateAgentButton" type="button"><strong>Update Historical Agent</strong></button>
+					</br></br></br></br></br></br>
+
+						
+	
+	
+						
+					</div>
+				</div>
+
+
 
 			<div class="sidebar-pane" id="settings">
 				<h1 class="sidebar-header">
@@ -195,6 +248,9 @@
 	<script src="./geo/land.js" type="text/javascript"></script>
 
 	<script>
+
+		
+
 
 		// Set slide
 		var mapPeriod = [267,330];
@@ -278,6 +334,14 @@
 		// Move the slide to the current year/
 		updateYear();
 
+
+		showUpdateAgentForm();
+		function showUpdateAgentForm() {
+			var temp = document.getElementsByTagName("template")[0];
+			var clon = temp.content.cloneNode(true);
+			document.getElementById("createAgentFormDiv").appendChild(clon);
+		}
+
 		function receiveMessage(event) {
 
 			if (event.data == "current") {
@@ -324,12 +388,30 @@
 					addAgents(data);
 
 					updateAgents();
+
+					listAgents(data);
 				}
 			};
 			xhttp.open("GET", path, true);
 			xhttp.send();
 		}
 
+		function listAgents(data) {
+
+			let agentsDropdown = document.getElementById("agentsList");
+			agentsDropdown.innerHTML = ""
+
+
+			data.forEach( function(element) {
+				let a;
+
+
+				let agentTag = `<option onclick="editAgent(this)" value="${element.name}" name="${element.name}" id="${element.id}">${element.name}</option>`
+				
+				agentsDropdown.innerHTML += agentTag;
+			});
+
+		}
 		function addAgents(data) {
 			
 			// I'll need this to test some things out... 
@@ -382,6 +464,7 @@
 
 
 		}
+
 
 		/** 
 		@description Sets up icon, popupAnchor, marker, pushes agent to Agents, and creates timeline event.
@@ -604,6 +687,47 @@
 			//xhttp.send(encodeURIComponent(data));
 			xhttp.send(data);
 		}
+
+		function onlyOne(checkbox) {
+			var checkboxes = document.getElementsByName('check');
+			checkboxes.forEach( (item) => {
+				if (item !== checkbox) item.checked = false;
+			});
+		}
+		
+		function editAgent(optionTag) {
+			let id = optionTag.id; // or optionTag.attributes.id
+			let value = optionTag.value; // optionTag.attributes.name; (this one would have more properties attached), interesting.
+			console.log("whole element");
+			console.log(optionTag);
+			console.log(optionTag.innerHTML);
+			console.log("id");
+			console.log(id);
+			console.log("value");
+			console.log(value);
+
+
+			document.getElementById("edit.id").innerHTML = `(ID: ${id})`;
+			document.getElementById("edit.name").innerHTML = value;
+
+			var temp = document.getElementsByTagName("template")[0];
+			temp.content.getElementById("updateAgentForm.name").value = value; 
+
+			var clon = temp.content.cloneNode(true);
+			
+			document.getElementById("editAgentFormDiv").innerHTML = "";
+			// console.log(temp);
+			console.log(temp.content);
+			document.getElementById("editAgentFormDiv").appendChild(clon);
+			// console.log(clon.content);
+			// console.log(clon.innerHTML);
+			// console.log(temp.getElementsByName("updateAgentForm.name"));
+			//clone.("updateAgentForm.name").value = "hola";
+
+					
+		}
+
+
 
 
 		// CLASSES
