@@ -71,19 +71,106 @@ app.get('/agents.datastore', function(req, res) {
  * Create a new agent
  */
 app.post('/createAgent.datastore', (req, res, next) => {
+
+    console.log("/createAgent.datastore")
+
     
     console.log("req.body");
     console.log(req.body);
+    console.log(req.body.name);
+    //console.log(req.name); this crashes everything
 
     console.log("content");
     console.log(req.body.content);
-    
+
     
     // It is already parsed!!!
     /*console.log("parsed json");    
     console.log(JSON.parse(req.body));*/
+
+
+    let name = req.body.name;
+    let type = req.body.type || "event";
+    console.log("type");
+    console.log(type);
+    let yearRange = [req.body.yearRange1, req.body.yearRange2];
+    let coordinates = [req.body.coordinates1, req.body.coordinates2];
+    let description = "./data/descriptions/constantinehailed.description.txt";
+    let descriptionAtt = "<a href = 'https://en.wikipedia.org/wiki/Constantine_the_Great' target='_blank'>Content from Wikipedia  (modified)</a>";
+    let picture = "./data/pictures/rome.picture.txt";
+    let pictureAtt = "<a href = 'https://en.wikipedia.org/wiki/Rome#/media/File:Trajansm%C3%A4rkte_Forum.jpg' target='_blank'>Content from Wikipedia</a>";
+    let iconUrl = "./agents/icons/rome.png";
+
+    let dataObj = {
+        "name": name,
+        "type": type,
+        "yearRange": yearRange,
+        "content": [{"title": "Description",
+                    "source": description,
+                    "att": descriptionAtt},
+                    {"title": "Picture",
+                    "source": picture,
+                    "att": pictureAtt}],
+        "coordinates": coordinates,
+        "iconUrl": iconUrl
+    };
+
+
+
+
     
-    getModel().create(req.body, (err, entity) => {
+    getModel().create(/*req.body*/dataObj, (err, entity) => {
+        if (err) {
+            next(err);
+            return;
+        }
+        res.json(entity); // or res.send(entity); ?
+        console.log("It worked out");
+    });
+});
+
+
+/**
+ * PUT updateAgent.datastore - changed to POST
+ * 
+ * Update an agent
+*/
+app./*put*/post('/updateAgent.datastore/:agentID/', (req, res, next) => {
+
+    console.log("/updateAgent.datastore");
+
+    /*console.log("req.params.agent");
+    console.log(req.params.agent);*/
+    console.log("req.body");
+    console.log(req.body);
+
+    let name = req.body.name;
+    let type = req.body.type || "event";
+    console.log("type");
+    console.log(type);
+    let yearRange = [req.body.yearRange1, req.body.yearRange2];
+    let coordinates = [req.body.coordinates1, req.body.coordinates2];
+    let description = "./data/descriptions/constantinehailed.description.txt";
+    let descriptionAtt = "<a href = 'https://en.wikipedia.org/wiki/Constantine_the_Great' target='_blank'>Content from Wikipedia  (modified)</a>";
+    let picture = "./data/pictures/rome.picture.txt";
+    let pictureAtt = "<a href = 'https://en.wikipedia.org/wiki/Rome#/media/File:Trajansm%C3%A4rkte_Forum.jpg' target='_blank'>Content from Wikipedia</a>";
+    let iconUrl = "./agents/icons/rome.png";
+
+    let dataObj = {
+        "name": name,
+        "type": type,
+        "yearRange": yearRange,
+        "content": [{"title": "Description",
+                    "source": description,
+                    "att": descriptionAtt},
+                    {"title": "Picture",
+                    "source": picture,
+                    "att": pictureAtt}],
+        "coordinates": coordinates,
+        "iconUrl": iconUrl
+    };
+
+    getModel().update(req.params.agentID, dataObj/*req.body*/, (err, entity) => {
         if (err) {
             next(err);
             return;
@@ -94,19 +181,25 @@ app.post('/createAgent.datastore', (req, res, next) => {
 
 
 /**
- * PUT updateAgent.datastore
+ * GET 
  * 
- * Update an agent
-*/
-app.put('updateAgent.datastore', (req, res, next) => {
-    getModel().update(req.params.agent, req.body, (err, entity) => {
+ * Retrieve an agent.
+ * 
+ */
+app.get('/readAgent.datastore/:agentID/', (req, res, next) => {
+    console.log("readAgent.datastore");
+    console.log(req.params.agentID);
+    getModel().read(req.params.agentID, (err, entity) => {
         if (err) {
             next(err);
             return;
         }
-        res.json(entity); // or res.send(entity); ?
+        res.json(entity);
     });
 });
+
+
+
 
 
 // instead of app.get('port') only... use 
