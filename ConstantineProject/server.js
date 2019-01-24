@@ -48,6 +48,7 @@ app.use(function(req, res, next){
 // Adding {index: 'scry.html'} in the options parameter did the job!
 
 
+// Retrieve existing agents (right now limited to 10)
 app.get('/agents.datastore', function(req, res) {
     
     getModel().list(10, req.query.pageToken, (err, entities, cursor) => {
@@ -181,6 +182,28 @@ app./*put*/post('/updateAgent.datastore/:agentID/', (req, res, next) => {
 
 
 /**
+ * DELETE
+ * 
+ * Delete a book
+ */
+
+app.delete('/delAgent.datastore/:agentID/', (req, res, next) => {
+
+    console.log("Delete method called");
+
+    getModel().delete(req.params.agentID, err => {
+        if (err) {
+            next(err);
+            return;
+        }
+
+        console.log("Deleted agent from datastore sucessfully");
+        res.status(200).send('OK');
+    });
+ });
+
+
+/**
  * GET 
  * 
  * Retrieve an agent.
@@ -197,7 +220,6 @@ app.get('/readAgent.datastore/:agentID/', (req, res, next) => {
         res.json(entity);
     });
 });
-
 
 
 

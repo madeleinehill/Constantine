@@ -638,6 +638,8 @@
 
 
 
+		// Not called anymore here. A lot of this logic was moved to the server side.
+		// Might get rid of it completely later.
 		/*document.getElementById("createAgentButton").onclick = */ function createAgentButton() {
 
 			let path = ("/createAgent.datastore");
@@ -987,12 +989,31 @@
 				data: $('#updateAgentForm').serialize(),
 				success: function(){
 					// successful call
+					console.log("Successful call to update method in server")
 				}
 				});
 
 			});
 
 			$('#updateAgentForm').trigger('submit');
+		});
+
+
+
+		$('#deleteAgentButton').click(function() {
+
+			console.log("deleteAgentButton clicked");
+
+			$.ajax({
+				url: '/delAgent.datastore/' + $('#edit\\.id').text(),
+				type: 'DELETE', // can't make this work with the delete method yet. Little detail, but still.
+				//data: '',
+				success: function() {
+					// successful call
+					console.log("Successful call to del method in server");
+				}
+			});
+
 		});
 		
 
