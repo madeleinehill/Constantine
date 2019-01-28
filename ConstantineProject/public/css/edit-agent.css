@@ -1,0 +1,7 @@
+element {
+    background-image: url("../tiles/paper.tile.jpg");
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.85) inset;
+    padding: 10px 20px;
+    height: 100%;
+    font-style: italic;
+}

@@ -50,6 +50,9 @@
 			</ul>
 
 			<ul role="tablist">
+				<li><a href="#add" role="tab"><i class="fa fa-plus-circle"></i></a></li>
+				<li><a href="#edit" role="tab"><i class="fa fa-pencil"></i></a></li>
+				<li><a href="#linkAgents" role="tab"><i class="fa fa-exchange"></i></a></li>
 				<li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
 			</ul>
 		</div>
@@ -89,6 +92,148 @@
 				</div>
 			</div>
 
+			<div class="sidebar-pane" id="add">
+				<h1 class="sidebar-header">
+							<div class = "shader">Create</div>
+							<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+						</h1>
+				<div class="paper">
+				
+					<p>Create new historical agent</p>
+					</br></br>
+					<!--h3>Create new historical agent:</h3-->
+				
+				<div id="createAgentFormDiv"></div>
+				<template>
+				<form action="createAgent.datastore" method="post" id="createAgentForm">
+					<label>Name:
+							<input type="text" name="name" id="name" placeholder="Venice"/>
+					</label>
+					</br></br>
+					<label>Type:
+							<!--input type="checkbox" name="check" onclick="onlyOne(this)" id="city">City</input>
+							<input type="checkbox" name="check" onclick="onlyOne(this)" id="person">Person</input>
+							<input type="checkbox" name="check" onclick="onlyOne(this)" id="event">Event</input-->
+							<select name="type" id="type" size="3">
+									<option value="city">City</option>
+									<option value="person">Person</option>
+									<option value="event">Event</option>
+							</select> 
+					</label>
+					</br></br>
+					<label>Year Range:
+							<!--/br-->
+							<input type="number" name="yearRange1" id="yearRange1" placeholder="272" style="width:50px;"/>
+							-
+							<input type="number" name="yearRange2" id="yearRange2" placeholder="337" style="width:50px;"/>
+					</label>
+					</br></br>
+					<label>Coordinates:
+							<!--/br-->
+							<input type="number" step="0.001" name="coordinates1" id="coordinates1" placeholder="45" style="width:50px;"/>
+							-
+							<input type="number" step="0.001" name="coordinates2" id="coordinates2" placeholder="15" style="width:50px;"/>
+					</label>
+					</br></br>
+					<label>Description:
+							<!--input type="text" name="description" id="description" value="Flavia Maxima Fausta (289–326) was a Roman Empress, daughter of the Roman Emperor Maximianus."/-->
+							<textarea rows="2" cols="40" name="description" id="description" placeholder="Venice is a city in northeastern Italy and the capital of the Veneto region."></textarea>
+							Attribution:<input type="text" name="description.att" id="description.att" placeholder="https://en.wikipedia.org/wiki/Venice"/>
+					</label>
+					</br></br>
+					<label>Picture:
+							<input type="file" name="picture" id="picture"/>
+							</br>
+							Attribution:<input type="text" name="picture.att" id="picture.att" placeholder="https://en.wikipedia.org/wiki/Venice#/media/File:Collage_Venezia.jpg"/>
+					</label>
+					</br></br>
+					<label>Icon:
+							<input type="file" name="icon" id="icon"/>
+					</label>
+					</br></br>
+
+				
+				</form>
+				</template>
+				<input type="submit" id="createAgentButton" value="Create Historical Agent"  form="createAgentForm">
+				
+
+					<!--strong><p>Create new historical agent.</p></strong>
+					<label>Agent's Name:
+							<input type="text" name="name" id="name" value="Fausta"/>
+					</label>
+					</br></br>
+					<label>Type:
+							<input type="text" name="type" id="type" value="person"/>
+					</label>
+					</br></br>
+					<label>Year Range:
+							</br>
+							<input type="number" name="yearRange1" id="yearRange1" value="272"/>
+							-
+							<input type="number" name="yearRange1" id="yearRange1" value="337"/>
+					</label-->
+					
+				</div>
+			</div>
+
+
+
+			<div class="sidebar-pane" id="edit">
+					<h1 class="sidebar-header">
+								<div class = "shader">Edit</div>
+								<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+							</h1>
+					<div class="paper">
+						<p>Edit existing historical agents</p>
+						</br></br>
+						<!--h3>Create new historical agent:</h3-->
+						<!--label>Name:
+								<input type="text" name="name" id="name" value="Venice"/>
+						</label-->
+						<!--/br></br-->
+						<label>Type:
+								<input type="checkbox" name="check" onclick="onlyOne(this)" id="city">City</input>
+								<input type="checkbox" name="check" onclick="onlyOne(this)" id="person">Person</input>
+								<input type="checkbox" name="check" onclick="onlyOne(this)" id="event">Event</input>
+								</br></br>
+								<select size="5" id="agentsList">
+								</select> 
+						</label>
+						</br>
+						<p id="edit.name"></p>
+						<span>(ID: </span><span id="edit.id"></span><span> )</span>
+						
+
+						<div id="editAgentFormDiv"></div>
+
+						<!--div class="paper"><iframe id = "editAgentFrame" src="./agents/edit-agent.html"></iframe></div-->
+	
+						<button id="updateAgentButton" type="button"><strong>Update Historical Agent</strong></button>
+						<!--input type="submit" id="updateAgentButton" value="Update Historical Agent"  form="updateAgentForm"-->
+						<button id="deleteAgentButton" type="button"><strong>Delete Historical Agent</strong></button>
+					</br></br></br></br></br></br>
+
+						
+	
+	
+						
+					</div>
+				</div>
+
+
+
+			<div class="sidebar-pane" id="linkAgents">
+				<h1 class="sidebar-header">
+							<div class = "shader">Link</div>
+							<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+						</h1>
+				<div class="paper">
+					<p>Add a link between two agents</p>
+					<p>(Feature in development)</p>
+					<button id="linkAgentsButton" type="button"><strong>Link Selected Agents</strong></button>
+				</div>
+			</div>
 			<div class="sidebar-pane" id="settings">
 				<h1 class="sidebar-header">
 							<div class = "shader">Settings</div>
@@ -118,7 +263,13 @@
 
 	<script src="./geo/land.js" type="text/javascript"></script>
 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
 	<script>
+
+		
+
+
 		// Set slide
 		var mapPeriod = [267,330];
 		var mapYear = mapPeriod[0];
@@ -192,14 +343,21 @@
 		var currentPopupFrame = null;
 		var currentPopupName = null;
 		var currentPopup = null;
-		// Agents Graph
-		var agentsGraph = null;
-
+		
 		// Receive messages from other windows.
 		window.addEventListener("message", receiveMessage, false);
 
 		// Move the slide to the current year/
 		updateYear();
+
+
+		showUpdateAgentForm();
+
+		function showUpdateAgentForm() {
+			var temp = document.getElementsByTagName("template")[0];
+			var clon = temp.content.cloneNode(true);
+			document.getElementById("createAgentFormDiv").appendChild(clon);
+		}
 
 		function receiveMessage(event) {
 
@@ -235,27 +393,46 @@
 
 
 		function getAgentsFromServer() {
-			let path = ("./agents/agents.json");
+			//let path = ("./agents/agents.json");
+			let path = ("/agents.datastore");
 			let xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
+
+					console.log("Server responded");
 					let data = JSON.parse(this.responseText);
 
 					addAgents(data);
 
 					updateAgents();
+
+					listAgents(data);
 				}
 			};
 			xhttp.open("GET", path, true);
 			xhttp.send();
 		}
 
+		function listAgents(data) {
+
+			let agentsDropdown = document.getElementById("agentsList");
+			agentsDropdown.innerHTML = ""
+
+
+			data.forEach( function(element) {
+				let a;
+
+
+				let agentTag = `<option onclick="editAgent(this)" value="${element.name}" name="${element.name}" id="${element.id}">${element.name}</option>`
+				
+				agentsDropdown.innerHTML += agentTag;
+			});
+
+		}
+
 		function addAgents(data) {
 			
-			// I'll need this to test some things out... 
-			agentsGraph = new AgentsGraph();
-			console.log('Created agentsGraph');
-
+			
 			data.forEach(function(element) {
 				let a;
 
@@ -267,41 +444,15 @@
 					setupEvent(element);
 				}
 
-				// I'll need this to test some things out too... haha
-				agentsDummyDatabase.set(element.name, element); // same as Agents, but I access with the name. Unnecessary because we have findAgents().
-				agentsGraph.addVertex(element.name);
 				
 
 			});
-			
-			// ** Will do this manually **FOR NOW** but need to figure it out properly later**
-			// I just wanna see how the agentsGraph data structure looks like
-			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Rome');
-			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Constantinople');
-			//agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor', 'Eboracum'); // Not actually modeled as a city yet...
-			agentsGraph.addAdjacentAgent('Edict of Milan','Rome');
-			//agentsGraph.addAdjacentAgent('Constantine', 'Milan'); // Not actually modeled as a city yet...
-			agentsGraph.addAdjacentAgent('Edict of Milan', 'Constantinople');
-			//agentsGraph.addAdjacentAgent('Constantinople','Edict of Milan');
-			agentsGraph.addAdjacentAgent('Rome','Constantinople');
-			// want to relate edict of milan to linicius
-			// want to relate edict of milan to milan
-			// want to relate linicius to rome
-			// want to relate linicius to milan.
-			// just to have toy data...
-
-
-			// Let's also add some subsequent events
-			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Edict of Milan',true);
-
-			// Let's how that graph looks like...
-			console.log(agentsGraph);
 			console.log(agents);
-			console.log(agentsDummyDatabase);
-
+			
 
 
 		}
+
 
 		/** 
 		@description Sets up icon, popupAnchor, marker, pushes agent to Agents, and creates timeline event.
@@ -468,6 +619,119 @@
 		}
 
 
+		function onlyOne(checkbox) {
+			var checkboxes = document.getElementsByName('check');
+			checkboxes.forEach( (item) => {
+				if (item !== checkbox) item.checked = false;
+			});
+		}
+
+
+
+		
+
+
+		
+
+
+
+		// Called when user submits new data for updating an agent.
+		function editAgent(optionTag) {
+
+
+			let id = optionTag.id; // or optionTag.attributes.id
+			let value = optionTag.value; // optionTag.attributes.name; (this one would have more properties attached), interesting.
+			console.log("whole element");
+			console.log(optionTag);
+			console.log(optionTag.innerHTML);
+			console.log("id");
+			console.log(id);
+			console.log("value");
+			console.log(value);
+
+
+			document.getElementById("edit.id").innerHTML = `${id}`//`(ID: ${id})`;
+			document.getElementById("edit.name").innerHTML = value;
+
+			var temp = document.getElementsByTagName("template")[0];
+			temp.content.getElementById("name").value = value; 
+
+			var clon = temp.content.cloneNode(true);
+			
+			document.getElementById("editAgentFormDiv").innerHTML = "";
+			// console.log(temp);
+			console.log(temp.content);
+			document.getElementById("editAgentFormDiv").appendChild(clon);
+			// console.log(clon.content);
+			// console.log(clon.innerHTML);
+			// console.log(temp.getElementsByName("updateAgentForm.name"));
+			//clone.("updateAgentForm.name").value = "hola";
+
+
+
+			let path = "/readAgent.datastore/" + id;
+			let xhttp = new XMLHttpRequest();
+			let data = null;
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					// Do shit
+					console.log("Server read agent in datastore");
+					console.log(this.responseText);
+					console.log(JSON.parse(this.responseText));
+
+					let agentData = JSON.parse(this.responseText); 
+
+					temp.content.getElementById("yearRange1").value = agentData.yearRange[0] || "";
+					temp.content.getElementById("yearRange2").value = agentData.yearRange[1] || "";
+
+					console.log(temp.content.getElementById("type").selectedIndex);
+					temp.content.getElementById("type").value  = agentData.type;
+					let selIndex = temp.content.getElementById("type").selectedIndex;
+					temp.content.getElementById("type").getElementsByTagName('option')[selIndex].selected = "selected";
+					console.log(temp.content.getElementById("type"));
+					console.log(temp.content.getElementById("type").getElementsByTagName('option')[0]);
+					//temp.content.getElementById("type").getElementsByTagName('option')[selIndex].trigger('change');
+					console.log(temp.content.getElementById("type").selectedIndex);
+					
+					if (agentData.coordinates) {
+						temp.content.getElementById("coordinates1").value = agentData.coordinates[0] || "";
+						temp.content.getElementById("coordinates2").value = agentData.coordinates[1] || "";
+					} else {
+						temp.content.getElementById("coordinates1").value = "";
+						temp.content.getElementById("coordinates2").value = "";
+					}
+					
+					if (agentData.content[0]) {
+						temp.content.getElementById("description").value = agentData.content[0].source || "";
+						temp.content.getElementById("description.att").value = agentData.content[0].att || "";
+					
+					}
+					
+					if (agentData.content[1]) {
+						/*temp.content.getElementById("picture").value = agentData.content[1].source;*/
+						temp.content.getElementById("picture.att").value = agentData.content[1].att || "";
+					}
+					
+
+					temp.content.querySelector("form").id = "updateAgentForm";
+					temp.content.querySelector("form").action = "/updateAgent.datastore";
+					//temp.content.querySelector("form").method = "put"; cannot do put with this shit
+					
+					clon = temp.content.cloneNode(true);
+					document.getElementById("editAgentFormDiv").innerHTML = "";
+					document.getElementById("editAgentFormDiv").appendChild(clon);
+				}
+			};
+
+			xhttp.open("GET", path, true);
+			xhttp.send();
+
+					
+		}
+
+
+
+
 		// CLASSES
 		class Agent {
 			constructor(name, content,type=null, yearRange=[-4000,3000]) {
@@ -514,92 +778,81 @@
 		}
 
 
+	// jquery code
+	$(document).ready(function(){
 
-		class Graph {
-
-			constructor() {
-				this.AdjList = new Map();
-			}
-
-			addVertex(vertex) {
-				// Remember that AdjList is a javascript Map (a dictionary)
-				// So we use the vertex as the key. The adjacency list (of more vertices) is the value.
-				this.AdjList.set(vertex, [])
-				
-			}
-
-			addUndirectedEdge(vertex1, vertex2) {
-				// vertx1 towards vertex2
-				this.AdjList.get(vertex1).push(vertex2);
-				// vertex2 towards vertex1, as graph is undirected.
-				this.AdjList.get(vertex2).push(vertex1);
-			}
-
-			addDirectedEdge(fromVertex, toVertex){
-				// fromVertex towards toVertex
-				this.AdjList.get(fromVertex).push(toVertex);
-			}
-
-			neighbors(vertex) {
-
-				return this.AdjList.get(vertex);
-			}
-
-
-		}
-
-
-		var agentsDummyDatabase = new Map();
-		class AgentsGraph extends Graph {
-
-
-			retrieveAgentFromDatabase(agentID){
-				// I could have done this with Agents object. Unnecessary to use the dummy db
-				return agentsDummyDatabase.get(agentID);
-				// return Agents.get(agentID); // or something like that
-			}
-
-			adjacentAgents(agentID, type=null) {
-				
-				// List of adjacent agents that will be returned
-				var adjAgentsList = []
-				
-				// We iterate adjacency list of the vertex 
-				for (var i = 0, size = super.neighbors(agentID).size; i < size; i++) {
-					
-					// With the adjAgentID
-					adjAgentID =  super.neighbors(agentID)[i];
-					// We can retrieve Agent Object from database
-					adjAgent = retrieveAgentFromDatabase(adjAgentID);
-
-
-					if ( adjAgent.type == type || type == null){
-						adjAgentsList.push(adjAgent)
-					}
+		// The forms are useful for sending data to the server.
+		// However, we want to send stuff  "in the AJAX way".
+		$('#createAgentForm').submit(function(e){
+			e.preventDefault();
+			$.ajax({
+				url:'/createAgent.datastore',
+				type: 'post',
+				data: $('#createAgentForm').serialize(),
+				success: function(){
+					// successful call
 				}
+			})
+		});
 
-				return adjAgentsList; // these are actual Agent objects.
+		// because we create the updateAgentForm quite dynamically
+		$('#updateAgentButton').click(function(){
+			console.log("#updateAgentButton clicked");
+			console.log($('#edit\\.id').text());
+			console.log('/updateAgent.datastore/' + $('#edit\\y.id').text());
+
+			$('#updateAgentForm').submit(function(e){
+
+				e.preventDefault();
+				
+				$.ajax({
+				url:'/updateAgent.datastore/' + $('#edit\\.id').text(),
+				type: 'post',
+				data: $('#updateAgentForm').serialize(),
+				success: function(){
+					// successful call
+					console.log("Successful call to update method in server")
+				}
+				});
+
+			});
+
+			$('#updateAgentForm').trigger('submit');
+		});
+
+
+
+		$('#deleteAgentButton').click(function() {
+
+			console.log("deleteAgentButton clicked");
+
+			$.ajax({
+				url: '/delAgent.datastore/' + $('#edit\\.id').text(),
+				type: 'DELETE', // can't make this work with the delete method yet. Little detail, but still.
+				//data: '',
+				success: function() {
+					// successful call
+					console.log("Successful call to del method in server");
+				}
+			});
+
+		});
+
+		$('#linkAgentsButton').click(function() {
+			console.log("linkAgentsButton clicked");
+
+			$.ajax({
+				url: '/linkAgents.datastore/5631986051842048/5629499534213120/undirected',
+				type: 'post',
+				data: '',
+				success: function() {
+					console.log("Successful call to link agents method in server");
+				}
+			});
+		});
 		
-				
-			}
 
-
-			// I think that I'll get rid of this function and just use the corresponding method(s) from the parent class...
-			addAdjacentAgent(agentID, adjAgentID, directedRelation = false) {
-
-				if (directedRelation == false){
-					super.addUndirectedEdge(agentID, adjAgentID);
-				} else {
-					// implement code for directed edges in Graph class
-					super.addDirectedEdge(agentID,adjAgentID);
-				}
-			}
-
-
-		}
-
-
-
+	});
 
 
 	</script>
