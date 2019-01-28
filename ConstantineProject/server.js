@@ -180,11 +180,140 @@ app./*put*/post('/updateAgent.datastore/:agentID/', (req, res, next) => {
     });
 });
 
+/**
+ * 
+ * Create link between agents
+ * 
+ */
+app.post('/linkAgents.datastore/:agentID1/:agentID2/:directed', (req, res, next) => {
+
+
+    // Will program this later on but the idea is very simple.
+    /**
+     * Read the agents that you need to modify. 
+     * Work them as JSON objects
+     * Add the relevant content where it corresponds
+     * Update the objects in datastore.
+     * DONE.
+     * All operations have been implemented before in different ways.
+     * 
+     * Even for the front end, it should be simple to set the stuff working. 
+     */
+
+    // Read the needed agents.
+    let agent1 = null;
+    let agent2 = null;
+    console.log("Reading agent:");
+    console.log(req.params.agentID1);
+
+    getModel().read(req.params.agentID1, (err, entity) => {
+        if (err) {
+            next(err);
+            return;
+        }
+        agent1 = entity; //res.json(entity);
+        // If that worked, read the other agent.
+
+        getModel().read(req.params.agentID2, (err, entity) => {
+            if (err) {
+                next(err);
+                return;
+            }
+
+            agent2 = entity; //res.json(entity);
+
+            // If that worked, continue with modifying them.
+            console.log("Agent1");
+            console.log(agent1);
+            console.log(agent2);
+            console.log("testing access to specific properties:");
+            console.log(agent1.name);
+            console.log(agent1.id);
+            console.log(agent1.coordinates);
+            // manipulate JSON OBJECTS and add relevant content.
+
+
+
+            // Add the relevant content.
+            let linksTabAgent1 = {"title": "Links",
+                                "source": "./data/pictures/constantinople.picture.txt",
+                                "att": null}
+            
+            let linksTabAgent2 = {"title": "Links",
+                                "source": "./data/pictures/constantinople.picture.txt",
+                                "att": null}
+
+
+            // If it is undirected, add to both agents
+            agent1.content.push(linksTabAgent1);
+            agent2.content.push(linksTabAgent2);
+
+            // Now, UPDATE back the agents
+            getModel().update(req.params.agentID1, agent1/*req.body*/, (err, entity) => {
+                if (err) {
+                    next(err);
+                    return;
+                }
+
+                // If the update of that one worked, do the other one.
+
+                getModel().update(req.params.agentID2, agent2/*req.body*/, (err, entity) => {
+                    if (err) {
+                        next(err);
+                        return;
+                    }
+
+                    console.log("Successfully updated agents in datastore");
+                    res.status(200).send('OK');
+                    //res.json(entity); // or res.send(entity);
+                    // this is extra here because I don't think I need to actually send anything back (data)...
+
+
+                });
+            });
+
+        });
+
+    });
+
+
+
+
+    // let dataObj = null
+
+    // // At the very end, we just update the agent(s).
+    // getModel().update(req.params.agentID1, dataObj/*req.body*/, (err, entity) => {
+    //     if (err) {
+    //         next(err);
+    //         return;
+    //     }
+    //     //res.json(entity); // or res.send(entity);
+    //     // this is extra here because I don't think I need to actually send anything back (data)...
+
+
+
+    //     // If the edge is undirected, do I just call this again? I guess I can create a sort of chain with
+    //     // the call backs...
+    //     getModel().update(req.params.agentID1, dataObj/*req.body*/, (err, entity) => {
+    //         if (err) {
+    //             next(err);
+    //             return;
+    //         }
+    //         res.json(entity); // or res.send(entity);
+    //         // this is extra here because I don't think I need to actually send anything back (data)...
+    //     });
+    // });
+
+    // have to move this. 
+    
+});
+
+
 
 /**
  * DELETE
  * 
- * Delete a book
+ * Delete an agent
  */
 
 app.delete('/delAgent.datastore/:agentID/', (req, res, next) => {

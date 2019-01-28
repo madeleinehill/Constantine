@@ -52,6 +52,7 @@
 			<ul role="tablist">
 				<li><a href="#add" role="tab"><i class="fa fa-plus-circle"></i></a></li>
 				<li><a href="#edit" role="tab"><i class="fa fa-pencil"></i></a></li>
+				<li><a href="#linkAgents" role="tab"><i class="fa fa-exchange"></i></a></li>
 				<li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
 			</ul>
 		</div>
@@ -93,7 +94,7 @@
 
 			<div class="sidebar-pane" id="add">
 				<h1 class="sidebar-header">
-							<div class = "shader">Edit</div>
+							<div class = "shader">Create</div>
 							<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
 						</h1>
 				<div class="paper">
@@ -201,7 +202,7 @@
 						</label>
 						</br>
 						<p id="edit.name"></p>
-						<span>(ID: </span><span id="edit.id">mierda</span><span> )</span>
+						<span>(ID: </span><span id="edit.id"></span><span> )</span>
 						
 
 						<div id="editAgentFormDiv"></div>
@@ -222,6 +223,17 @@
 
 
 
+			<div class="sidebar-pane" id="linkAgents">
+				<h1 class="sidebar-header">
+							<div class = "shader">Link</div>
+							<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+						</h1>
+				<div class="paper">
+					<p>Add a link between two agents</p>
+					<p>(Feature in development)</p>
+					<button id="linkAgentsButton" type="button"><strong>Link Selected Agents</strong></button>
+				</div>
+			</div>
 			<div class="sidebar-pane" id="settings">
 				<h1 class="sidebar-header">
 							<div class = "shader">Settings</div>
@@ -331,9 +343,7 @@
 		var currentPopupFrame = null;
 		var currentPopupName = null;
 		var currentPopup = null;
-		// Agents Graph
-		var agentsGraph = null;
-
+		
 		// Receive messages from other windows.
 		window.addEventListener("message", receiveMessage, false);
 
@@ -342,6 +352,7 @@
 
 
 		showUpdateAgentForm();
+
 		function showUpdateAgentForm() {
 			var temp = document.getElementsByTagName("template")[0];
 			var clon = temp.content.cloneNode(true);
@@ -418,12 +429,10 @@
 			});
 
 		}
+
 		function addAgents(data) {
 			
-			// I'll need this to test some things out... 
-			agentsGraph = new AgentsGraph();
-			console.log('Created agentsGraph');
-
+			
 			data.forEach(function(element) {
 				let a;
 
@@ -435,38 +444,11 @@
 					setupEvent(element);
 				}
 
-				// I'll need this to test some things out too... haha
-				agentsDummyDatabase.set(element.name, element); // same as Agents, but I access with the name. Unnecessary because we have findAgents().
-				agentsGraph.addVertex(element.name);
 				
 
 			});
-			
-			// ** Will do this manually **FOR NOW** but need to figure it out properly later**
-			// I just wanna see how the agentsGraph data structure looks like
-			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Rome');
-			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Constantinople');
-			//agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor', 'Eboracum'); // Not actually modeled as a city yet...
-			agentsGraph.addAdjacentAgent('Edict of Milan','Rome');
-			//agentsGraph.addAdjacentAgent('Constantine', 'Milan'); // Not actually modeled as a city yet...
-			agentsGraph.addAdjacentAgent('Edict of Milan', 'Constantinople');
-			//agentsGraph.addAdjacentAgent('Constantinople','Edict of Milan');
-			agentsGraph.addAdjacentAgent('Rome','Constantinople');
-			// want to relate edict of milan to linicius
-			// want to relate edict of milan to milan
-			// want to relate linicius to rome
-			// want to relate linicius to milan.
-			// just to have toy data...
-
-
-			// Let's also add some subsequent events
-			agentsGraph.addAdjacentAgent('Constantine Hailed as Emperor','Edict of Milan',true);
-
-			// Let's how that graph looks like...
-			console.log(agentsGraph);
 			console.log(agents);
-			console.log(agentsDummyDatabase);
-
+			
 
 
 		}
@@ -637,73 +619,6 @@
 		}
 
 
-
-		// Not called anymore here. A lot of this logic was moved to the server side.
-		// Might get rid of it completely later.
-		/*document.getElementById("createAgentButton").onclick = */ function createAgentButton() {
-
-			let path = ("/createAgent.datastore");
-			let xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-
-					//console.log("Server responded");
-					//let data = JSON.parse(this.responseText);
-				}
-			};
-			xhttp.open("POST", path, true);
-			xhttp.setRequestHeader('Content-Type', 'application/json');
-
-
-
-
-			let createAgentFormDiv = document.getElementById("createAgentFormDiv");
-			console.log("createAgentFormDiv");
-			console.log(createAgentFormDiv);
-			//console.log(createAgentFormDiv.getElementById("name")); doesn't work
-
-			let name = document.getElementById("name").value;
-			let type = "event";
-			let yearRange = [document.getElementById("yearRange1").value, document.getElementById("yearRange2").value];
-			let coordinates = [document.getElementById("coordinates1").value, document.getElementById('coordinates2').value];
-			let description = "./data/descriptions/constantinehailed.description.txt";
-			let descriptionAtt = "<a href = 'https://en.wikipedia.org/wiki/Constantine_the_Great' target='_blank'>Content from Wikipedia  (modified)</a>";
-			let picture = "./data/pictures/rome.picture.txt";
-			let pictureAtt = "<a href = 'https://en.wikipedia.org/wiki/Rome#/media/File:Trajansm%C3%A4rkte_Forum.jpg' target='_blank'>Content from Wikipedia</a>";
-			let iconUrl = "./agents/icons/rome.png";
-
-			let dataObj = {
-				"name": name,
-				"type": type,
-				"yearRange": yearRange,
-				"content": [{"title": "Description",
-							"source": description,
-							"att": descriptionAtt},
-							{"title": "Picture",
-							"source": picture,
-							"att": pictureAtt}],
-				"coordinates": coordinates,
-				"iconUrl": iconUrl
-			};
-
-			let anotherTab = {"title": "Events",
-							"source": description,
-							"att": descriptionAtt};
-
-			console.log("Data object.contet");
-			console.log(dataObj.content);
-			//dataObj.content.push(anotherTab);
-			console.log(dataObj.content);
-
-			let data = JSON.stringify(dataObj);
-			console.log("JSON data");
-			console.log(data);
-			console.log("Encoded JSON data");
-			console.log(encodeURIComponent(data));
-			//xhttp.send(encodeURIComponent(data));
-			xhttp.send(data);
-		}
-
 		function onlyOne(checkbox) {
 			var checkboxes = document.getElementsByName('check');
 			checkboxes.forEach( (item) => {
@@ -713,15 +628,7 @@
 
 
 
-		/*document.getElementById("updateAgentButton").onclick = function () {
-			
-		};*/
-
-
-		document.getElementById("deleteAgentButton").onclick = function () {
-
-		};
-
+		
 
 
 		
@@ -871,91 +778,6 @@
 		}
 
 
-
-		class Graph {
-
-			constructor() {
-				this.AdjList = new Map();
-			}
-
-			addVertex(vertex) {
-				// Remember that AdjList is a javascript Map (a dictionary)
-				// So we use the vertex as the key. The adjacency list (of more vertices) is the value.
-				this.AdjList.set(vertex, [])
-				
-			}
-
-			addUndirectedEdge(vertex1, vertex2) {
-				// vertx1 towards vertex2
-				this.AdjList.get(vertex1).push(vertex2);
-				// vertex2 towards vertex1, as graph is undirected.
-				this.AdjList.get(vertex2).push(vertex1);
-			}
-
-			addDirectedEdge(fromVertex, toVertex){
-				// fromVertex towards toVertex
-				this.AdjList.get(fromVertex).push(toVertex);
-			}
-
-			neighbors(vertex) {
-
-				return this.AdjList.get(vertex);
-			}
-
-
-		}
-
-
-		var agentsDummyDatabase = new Map();
-		class AgentsGraph extends Graph {
-
-
-			retrieveAgentFromDatabase(agentID){
-				// I could have done this with Agents object. Unnecessary to use the dummy db
-				return agentsDummyDatabase.get(agentID);
-				// return Agents.get(agentID); // or something like that
-			}
-
-			adjacentAgents(agentID, type=null) {
-				
-				// List of adjacent agents that will be returned
-				var adjAgentsList = []
-				
-				// We iterate adjacency list of the vertex 
-				for (var i = 0, size = super.neighbors(agentID).size; i < size; i++) {
-					
-					// With the adjAgentID
-					adjAgentID =  super.neighbors(agentID)[i];
-					// We can retrieve Agent Object from database
-					adjAgent = retrieveAgentFromDatabase(adjAgentID);
-
-
-					if ( adjAgent.type == type || type == null){
-						adjAgentsList.push(adjAgent)
-					}
-				}
-
-				return adjAgentsList; // these are actual Agent objects.
-		
-				
-			}
-
-
-			// I think that I'll get rid of this function and just use the corresponding method(s) from the parent class...
-			addAdjacentAgent(agentID, adjAgentID, directedRelation = false) {
-
-				if (directedRelation == false){
-					super.addUndirectedEdge(agentID, adjAgentID);
-				} else {
-					// implement code for directed edges in Graph class
-					super.addDirectedEdge(agentID,adjAgentID);
-				}
-			}
-
-
-		}
-
-
 	// jquery code
 	$(document).ready(function(){
 
@@ -1014,6 +836,19 @@
 				}
 			});
 
+		});
+
+		$('#linkAgentsButton').click(function() {
+			console.log("linkAgentsButton clicked");
+
+			$.ajax({
+				url: '/linkAgents.datastore/5631986051842048/5629499534213120/undirected',
+				type: 'post',
+				data: '',
+				success: function() {
+					console.log("Successful call to link agents method in server");
+				}
+			});
 		});
 		
 

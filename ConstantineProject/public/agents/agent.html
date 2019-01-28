@@ -14,17 +14,9 @@
     <div class = "tab" id = "tab">
     </div>
     <hr>
-
-    <div>
-        <p class = 'graphdata' id = "graphdata"></p>
-    </div>
-    <div id ="tabscontent">
-
-    </div>
   
     <script>
       window.addEventListener("message", addData, false);
-      //window.addEventListener("graphdata", addAdjacentAgents, false); // Not a good idea. It doesn't work that way.
       requestData();
 
       function requestData() {
@@ -58,49 +50,26 @@
         
         // Add tabs to popup
         // Performs a series of XMLHttpRequests to add tabs asynchronously and gradually...
-        addTabs(event.data.content, event.data.name);
-
-
-
-
-        //addTabs("dummytab");
-        //addSingleExtraEmptyTab("Events",event.data.name);
-
-
-        // Add adjacent agents
-        //addAdjacentAgents(event.data.name);
-
-
-        // 
-        //requestGraphData();
-        //addAdjacentAgents(event.data.name);
-        // // Add graph data
-        // edge1 = '<a id="' + event.data.name + '" href="http://www.google.com">'+event.data.name+'</a>'
-        // //edge1 = '<a id="" href="http://www.google.com">'+event.data.name+'</a>'
-        // document.getElementById('graphdata').innerHTML = edge1;
-        // document.getElementById(event.data.name).onclick = function() {
-        //   // Do something cool...
-        //   parent.postMessage('switchnode', '*');
-        //   return false;
-        // }
-
+        addTabs(event.data.content);
 
       }
       
 
       //Performs a series of XMLHttpRequests to add tabs asynchronously and gradually.
-      function addTabs(content, evtName = null, index = 0) {
+      function addTabs(content, index = 0) {
 
         let tab = content[index];
-
         //***
+        console.log("Content");
+        console.log(content);
+
         console.log("tab.title");
         console.log(tab.title);
         //console.log(event.data);
         console.log(content);
         //***
 
-        let path = tab.source;
+        let path = tab.source; // could be tab.source || tab.text property... would allow some flexibility.
         let xhttp = new XMLHttpRequest();
         let data = null;
         xhttp.onreadystatechange = function() {
@@ -119,8 +88,7 @@
               c.appendChild(s);
             }
 
-            //document.getElementById('main').appendChild(c);
-            document.getElementById('tabscontent').appendChild(c);
+            document.getElementById('main').appendChild(c);
 
             let b = document.createElement("BUTTON");
             b.className = "tablinks"
@@ -133,16 +101,9 @@
             }
 
             if (index<content.length-1) {
-              addTabs(content, evtName, index+1);
+              addTabs(content,index+1);
             }
-            // } else {
-            //   addSingleExtraEmptyTab("Events",evtName);
-            // }
             
-            // if (index >= content.length-1) {
-            //   addSingleExtraEmptyTab("»","»",evtName);
-            // }
-
          }
 
         };
@@ -154,48 +115,7 @@
       }
 
 
-      /** 
-		  @description .
- 		  */
-      function addSingleExtraEmptyTab(tabText, tabID, agentID){
-
-        let xhttp = new XMLHttpRequest();
-        let data = null;
-        //let path = tab.source;
-        
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-
-            let c = document.createElement("DIV");
-            c.id = tabID//tabTitle;//tab.title;
-            c.style.display = 'none';
-            c.innerHTML = this.responseText;
-
-            //document.getElementById('main').appendChild(c);
-            document.getElementById('tabscontent').appendChild(c);
-
-            let b = document.createElement("BUTTON");
-            b.className = "tablinks"
-            b.addEventListener("click", function(event) {openTab(event, tabID, agentID)});
-            b.innerHTML = tabText;
-            document.getElementById('tab').appendChild(b);
-
-            if (document.getElementById('tab').children.length == 1) {
-              b.click();
-            }
-
-            // let's actually save it in a variable
-            var graphLinks = c;
-            console.log("Graph Links");
-            console.log(graphLinks);
-
-         }
-        };
-        //xhttp.open("GET", path, true); // we don't have a path...
-        xhttp.open("GET","/",true);
-        xhttp.send();
-      }
-
+     
 
       /** 
 		  @description .
@@ -217,22 +137,8 @@
              tablinks[i].className = tablinks[i].className.replace(" active", "");
          }
 
-         if (tabName != "Events" & tabName != "»") {
-          document.getElementById(tabName).style.display = "block";
-          evt.currentTarget.className += " active";
-         }
-         else {
-           //document.getElementById(tabName).innerHTML = "<p>Hello, fucking and confusing, JS world!</p>";
-           document.getElementById(tabName).innerHTML = "";
-           console.log(document.getElementById(tabName));
-           addAdjacentAgents(agentID);
-           //document.getElementById(tabName).innerHTML = returnAdjAgentsHTML(agentID);
-           document.getElementById(tabName).style.display = "block";
-           evt.currentTarget.className += " active";
-         }
-         
-
-
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
 
          //***
          console.log(evt);
