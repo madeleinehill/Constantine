@@ -301,9 +301,11 @@
 
 
 		var polStyle = {
-			"color": "#FF0000",
-			"weight": 0,
-			"fillOpacity": 0.3
+			"fillColor": "#F66",
+			"fillOpacity": 0.3,
+      "weight": 1,
+      "opacity": 0.5,
+      "color": "#A00"  //Outline color
 		};
 
 		/*
@@ -326,9 +328,9 @@
 		}).addTo(map);
 
 		// Set Water Layer - based on rvr (data) and wtrStyle
-		var wtrLyr = L.geoJSON(rvr, {
+		/*var wtrLyr = L.geoJSON(rvr, {
 			style: wtrStyle
-		}).addTo(map);
+		}).addTo(map);*/
 
 		// All Agents
 		var agents = [];
