@@ -13,6 +13,6 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "@google-cloud/datastore": "2.0.0",
-    "nconf": "0.10.0"
+    "nconf": "0.11.4"
   }
 }
